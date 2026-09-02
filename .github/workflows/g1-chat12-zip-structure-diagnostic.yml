@@ -1,0 +1,111 @@
+name: g1-chat12-zip-structure-diagnostic
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect-zip-structure:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rank CHAT-12 repair candidates by ZIP integrity
+        shell: bash
+        env:
+          EXPECTED_SHA256: fdf40b01bc1dd3cc68b39fa118aab9b312683756126df63c25b71bce15d086a1
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64, hashlib, io, itertools, os, zipfile
+          from pathlib import Path
+
+          expected = os.environ['EXPECTED_SHA256']
+          def txt(p): return ''.join(Path(p).read_text(encoding='utf-8').split())
+          parts = {int(p.stem): txt(p) for p in sorted(Path('baseline/parts').glob('*.b64'))}
+          repairs = {p.stem: txt(p) for p in sorted(Path('baseline/repair').glob('*.b64'))}
+          original_stream = ''.join(parts[i] for i in sorted(parts))
+
+          print('GLOBAL_REPAIR_ALIGNMENT')
+          for name, r in sorted(repairs.items()):
+              print(name, 'len=', len(r), 'global_find=', original_stream.find(r))
+
+          def opts(i):
+              o = parts[i]
+              r0 = repairs.get(f'{i:03d}0')
+              r1 = repairs.get(f'{i:03d}1')
+              vals = [('orig', o)]
+              if r0 is not None:
+                  vals += [('r0_then_orig_tail', r0 + o[len(r0):])]
+              if r1 is not None:
+                  vals += [
+                    ('orig_first10k_r1', o[:10000] + r1),
+                    ('replace_last_r1', o[:-len(r1)] + r1 if len(r1) <= len(o) else r1),
+                  ]
+              if r0 is not None and r1 is not None:
+                  vals += [
+                    ('r0_r1', r0 + r1),
+                    ('r0_fill_to10k_r1', r0 + o[len(r0):10000] + r1),
+                    ('r0_r1_orig_tail', r0 + r1 + o[len(r0)+len(r1):]),
+                  ]
+              out=[]; seen=set()
+              for n,v in vals:
+                  h=hashlib.sha256(v.encode()).digest()
+                  if h not in seen:
+                      seen.add(h); out.append((n,v))
+              return out
+
+          target = [i for i in range(1,5) if i in parts]
+          sets = [opts(i) for i in target]
+          print('OPTION_COUNTS', {i:len(s) for i,s in zip(target,sets)})
+
+          ranked=[]
+          exact=[]
+          for combo in itertools.product(*sets):
+              m=dict(parts); recipe=[]
+              for i,(n,v) in zip(target,combo): m[i]=v; recipe.append(f'{i:03d}:{n}')
+              s=''.join(m[i] for i in sorted(m))
+              try: raw=base64.b64decode(s,validate=True)
+              except Exception: continue
+              sha=hashlib.sha256(raw).hexdigest()
+              if sha==expected: exact.append((recipe,len(raw)))
+              entries=good=0; bad=''; zerr=''
+              try:
+                  with zipfile.ZipFile(io.BytesIO(raw)) as z:
+                      infos=z.infolist(); entries=len(infos)
+                      for info in infos:
+                          try:
+                              z.read(info); good += 1
+                          except Exception as e:
+                              bad=f'{info.filename}: {type(e).__name__}: {e}'
+                              break
+              except Exception as e:
+                  zerr=f'{type(e).__name__}: {e}'
+              ranked.append((good,entries,sha,len(raw),','.join(recipe),bad,zerr))
+
+          ranked.sort(reverse=True, key=lambda x:(x[0],x[1]))
+          print('DECODED_CANDIDATES', len(ranked), 'EXACT', len(exact))
+          for row in ranked[:30]:
+              print('RANK good=%d entries=%d sha=%s bytes=%d recipe=%s bad=%s ziperr=%s' % row)
+          for recipe,n in exact:
+              print('TARGET_MATCH', n, ','.join(recipe))
+
+          # Character-level comparison of repair halves against their nominal regions.
+          print('NOMINAL_DIFFS')
+          for i in target:
+              o=parts[i]
+              for half in (0,1):
+                  r=repairs.get(f'{i:03d}{half}')
+                  if r is None: continue
+                  start=half*10000
+                  nominal=o[start:start+len(r)]
+                  mism=[j for j,(a,b) in enumerate(zip(r,nominal)) if a!=b]
+                  print(f'{i:03d}{half}: nominal_start={start} compared={min(len(r),len(nominal))} mismatches={len(mism)} first={mism[:20]}')
+
+          if exact:
+              raise SystemExit(0)
+          # This is intentionally a diagnostic failure until the exact required source is reconstructed.
+          raise SystemExit('No exact target SHA; see ranked ZIP-integrity candidates above')
+          PY
