@@ -19,7 +19,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import base64, binascii, hashlib, os, struct, zlib
+          import base64, binascii, hashlib, io, os, struct, zipfile, zlib
           from pathlib import Path
 
           EXPECTED=os.environ['EXPECTED_SHA256']
@@ -28,23 +28,25 @@ jobs:
           def txt(p): return ''.join(Path(p).read_text().split())
           parts={int(x.stem):txt(x) for x in Path('baseline/parts').glob('*.b64')}
           repairs={x.stem:txt(x) for x in Path('baseline/repair').glob('*.b64')}
+
+          # Previously proven same-length repairs.
           for i in (1,2,3): parts[i]=parts[i][:10000]+repairs[f'{i:03d}1']
           s=''.join(parts[i] for i in sorted(parts))
 
-          def dec_loose(text):
-              # Parse only the largest complete Base64 prefix. This is safe for locating
-              # corruption well before the malformed tail and avoids pretending padding repairs data.
-              t=''.join(text.split()).rstrip('=')
-              t=t[:len(t)-(len(t)%4)]
-              return base64.b64decode(t, validate=True)
+          # Previously proven structural repairs from per-entry CRC solving.
+          assert s[96995]=='i'
+          s=s[:96995]+s[96996:]
+          s=s[:120000]+'3'+s[120000:]
+          s=s[:140000]+'l'+s[140000:]
+          assert len(s)==175004
 
+          def dec(text): return base64.b64decode(text,validate=True)
           def parse_header(raw,pos):
               if pos+30>len(raw) or raw[pos:pos+4]!=LH: return None
               sig,ver,flags,method,mt,md,crc,csize,usize,nlen,xlen=struct.unpack_from('<IHHHHHIIIHH',raw,pos)
               hs=pos; ns=pos+30; ds=ns+nlen+xlen; de=ds+csize
               name=raw[ns:ns+nlen].decode('utf-8','replace')
               return dict(hs=hs,ds=ds,de=de,flags=flags,method=method,crc=crc,csize=csize,usize=usize,name=name)
-
           def verify_entry(raw,h):
               if h['flags'] & 0x08: return False,'data-descriptor'
               if h['de']>len(raw): return False,'truncated-data'
@@ -58,85 +60,62 @@ jobs:
               crc=binascii.crc32(out)&0xffffffff
               if crc!=h['crc']: return False,f"crc:{crc:08x}!={h['crc']:08x}"
               return True,'ok'
-
           def first_bad(text):
-              raw=dec_loose(text); pos=0; good=0; last=None
+              raw=dec(text); pos=0; good=0; last=None
               while True:
-                  if pos+4>len(raw): return dict(kind='eof',good=good,pos=pos,last=last,rawlen=len(raw))
+                  if pos+4>len(raw): return dict(kind='eof',good=good,pos=pos,last=last)
                   sig=raw[pos:pos+4]
-                  if sig in (CD,EOCD): return dict(kind='central',good=good,pos=pos,last=last,rawlen=len(raw))
+                  if sig in (CD,EOCD): return dict(kind='central',good=good,pos=pos,last=last)
                   h=parse_header(raw,pos)
-                  if not h: return dict(kind='signature',good=good,pos=pos,last=last,rawlen=len(raw),sig=sig.hex())
+                  if not h: return dict(kind='signature',good=good,pos=pos,last=last,sig=sig.hex())
                   ok,why=verify_entry(raw,h)
-                  if not ok: return dict(kind='entry',good=good,pos=pos,last=last,bad=h,why=why,rawlen=len(raw))
+                  if not ok: return dict(kind='entry',good=good,pos=pos,last=last,bad=h,why=why)
                   good+=1; last=h; pos=h['de']
-
-          def b64_cover(h):
-              return 4*(h['hs']//3), 4*((h['de']+2)//3)
-
-          def verify_candidate_segment(seg, global_cs, h):
+          def b64_cover(h): return 4*(h['hs']//3),4*((h['de']+2)//3)
+          def verify_candidate_segment(seg,global_cs,h):
               if len(seg)%4: return False
               try: raw=base64.b64decode(seg,validate=True)
               except Exception: return False
-              raw0=3*(global_cs//4)
-              lhs=h['hs']-raw0
+              raw0=3*(global_cs//4); lhs=h['hs']-raw0
               if lhs<0 or raw[lhs:lhs+4]!=LH: return False
               hh=parse_header(raw,lhs)
               if not hh: return False
               for k in ('method','crc','csize','usize','flags'):
                   if hh[k]!=h[k]: return False
-              ok,_=verify_entry(raw,hh)
-              return ok
+              return verify_entry(raw,hh)[0]
 
-          print('INITIAL', first_bad(s))
-          fb=first_bad(s)
-          if fb.get('kind')!='entry': raise SystemExit(f'Cannot localize part004 extra char: {fb}')
-          h=fb['bad']; cs,ce=b64_cover(h)
-          obs=s[cs:ce+1]
-          dels=[]
-          for rel in range(len(obs)):
-              cand=obs[:rel]+obs[rel+1:]
-              if verify_candidate_segment(cand,cs,h): dels.append(cs+rel)
-          print('DELETE_CANDIDATES',dels[:100],'count=',len(dels),'entry=',h['name'],'window=',(cs,ce))
-          p4start=sum(len(parts[i]) for i in range(4))
-          valid_dels=[x for x in dels if p4start+10000 <= x < p4start+len(parts[4])]
-          if len(valid_dels)!=1: raise SystemExit(f'Expected exactly one part004 deletion candidate, got {valid_dels}')
-          d4=valid_dels[0]
-          original_s=s
-          s=s[:d4]+s[d4+1:]
-          print('APPLY_DELETE4 global=',d4,'part_rel=',d4-p4start,'char=',repr(original_s[d4]))
-          print('AFTER_DELETE4', first_bad(s))
-
-          def solve_missing_char(text, expected_part_start, expected_part_len, label):
-              fb=first_bad(text)
-              if fb.get('kind')!='entry': raise SystemExit(f'Cannot localize {label} missing char: {fb}')
-              h=fb['bad']; cs,ce=b64_cover(h)
-              obs=text[cs:ce-1]
+          replacements=[]
+          for round_no in range(1,21):
+              fb=first_bad(s)
+              print('ROUND',round_no,fb)
+              if fb['kind']=='central': break
+              if fb['kind']!='entry': raise SystemExit(f'Non-entry corruption requires separate handling: {fb}')
+              h=fb['bad']; cs,ce=b64_cover(h); seg=s[cs:ce]
               sols=[]
-              for rel in range(len(obs)+1):
+              for rel,old in enumerate(seg):
                   for ch in ALPH:
-                      cand=obs[:rel]+ch+obs[rel:]
-                      if verify_candidate_segment(cand,cs,h): sols.append((cs+rel,ch))
-              print(label,'INSERT_CANDIDATES',sols[:100],'count=',len(sols),'entry=',h['name'],'window=',(cs,ce))
-              valid=[x for x in sols if expected_part_start <= x[0] <= expected_part_start+expected_part_len]
-              if len(valid)!=1: raise SystemExit(f'Expected exactly one {label} insertion candidate, got {valid[:100]} count={len(valid)}')
-              pos,ch=valid[0]
-              return text[:pos]+ch+text[pos:],pos,ch
+                      if ch==old: continue
+                      cand=seg[:rel]+ch+seg[rel+1:]
+                      if verify_candidate_segment(cand,cs,h): sols.append((cs+rel,old,ch))
+              print('REPLACE_CANDIDATES',sols[:100],'count=',len(sols),'entry=',h['name'],'window=',(cs,ce))
+              if len(sols)!=1: raise SystemExit(f'Expected one single-character replacement, got {len(sols)}')
+              pos,old,new=sols[0]
+              s=s[:pos]+new+s[pos+1:]
+              replacements.append((pos,old,new,h['name']))
+              print('APPLY_REPLACE global=',pos,'old=',old,'new=',new,'entry=',h['name'])
+          else:
+              raise SystemExit('Replacement iteration limit exceeded')
 
-          p6start=120000
-          s,i6,c6=solve_missing_char(s,p6start,20000,'part006')
-          print('APPLY_INSERT6 global=',i6,'part_rel=',i6-p6start,'char=',c6)
-          print('AFTER_INSERT6', first_bad(s))
-
-          p7start=140000
-          s,i7,c7=solve_missing_char(s,p7start,20000,'part007')
-          print('APPLY_INSERT7 global=',i7,'part_rel=',i7-p7start,'char=',c7)
-          print('AFTER_INSERT7', first_bad(s))
-
-          raw=base64.b64decode(s,validate=True)
+          fb=first_bad(s)
+          print('LOCAL_FINAL',fb)
+          raw=dec(s)
+          with zipfile.ZipFile(io.BytesIO(raw)) as z:
+              bad=z.testzip(); names=z.namelist()
+              print('ZIP entries=',len(names),'testzip=',bad)
+              if bad is not None: raise SystemExit(f'zipfile CRC failure remains: {bad}')
           sha=hashlib.sha256(raw).hexdigest()
+          print('REPLACEMENTS',replacements)
           print('FINAL chars=',len(s),'bytes=',len(raw),'sha256=',sha)
-          print('RECIPE delete4=',d4-p4start,'insert6=',i6-p6start,c6,'insert7=',i7-p7start,c7)
-          if sha!=EXPECTED: raise SystemExit(f'CRC-repaired ZIP hash {sha} != required {EXPECTED}')
+          if sha!=EXPECTED: raise SystemExit(f'Fully local-CRC-valid ZIP hash {sha} != required {EXPECTED}')
           print('TARGET_MATCH',EXPECTED)
           PY
