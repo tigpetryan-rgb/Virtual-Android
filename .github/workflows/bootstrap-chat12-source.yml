@@ -1,0 +1,50 @@
+name: bootstrap-chat12-source
+
+on:
+  push:
+    paths:
+      - 'baseline/IMPORT_READY'
+
+permissions:
+  contents: write
+
+jobs:
+  materialize-canonical-baseline:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Reconstruct and verify CHAT-12 source release
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat baseline/parts/*.b64 | base64 -d > /tmp/chat12-source.zip
+          echo 'fdf40b01bc1dd3cc68b39fa118aab9b312683756126df63c25b71bce15d086a1  /tmp/chat12-source.zip' | sha256sum -c -
+          rm -rf /tmp/chat12-extracted /tmp/va-governance
+          mkdir -p /tmp/chat12-extracted /tmp/va-governance
+          cp README.md AGENTS.md VIRTUAL_ANDROID_MASTER_PLAN.md PROJECT_STATE.json /tmp/va-governance/
+          unzip -q /tmp/chat12-source.zip -d /tmp/chat12-extracted
+          SRC="$(find /tmp/chat12-extracted -mindepth 1 -maxdepth 1 -type d | head -1)"
+          test -n "$SRC"
+          mkdir -p docs evidence/CHAT-12
+          cp "$SRC/README.md" /tmp/BASELINE_CHAT12_README.md
+          cp -a "$SRC"/. .
+          cp /tmp/va-governance/README.md README.md
+          cp /tmp/va-governance/AGENTS.md AGENTS.md
+          cp /tmp/va-governance/VIRTUAL_ANDROID_MASTER_PLAN.md VIRTUAL_ANDROID_MASTER_PLAN.md
+          cp /tmp/va-governance/PROJECT_STATE.json PROJECT_STATE.json
+          cp /tmp/BASELINE_CHAT12_README.md docs/BASELINE_CHAT12_README.md
+          printf '%s  %s\n' 'fdf40b01bc1dd3cc68b39fa118aab9b312683756126df63c25b71bce15d086a1' 'CHAT-12 deterministic source release' > evidence/CHAT-12/SOURCE_RELEASE_SHA256.txt
+          rm -rf baseline/parts baseline/IMPORT_READY
+          rm -f .github/workflows/bootstrap-chat12-source.yml
+      - name: Commit canonical G1 baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'virtual-android-bootstrap'
+          git config user.email 'virtual-android-bootstrap@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git commit -m 'G1/CHAT-12: materialize reproducible baseline'
+          git push origin HEAD:main
