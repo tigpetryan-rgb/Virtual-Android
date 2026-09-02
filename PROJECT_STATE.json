@@ -1,0 +1,75 @@
+{
+  "project": "Virtual Android",
+  "plan_id": "VA-MASTER-PLAN",
+  "plan_version": "1.0.1",
+  "canonical_date": "2026-09-02",
+  "overall_status": "G0_COMPLETE_G1_NEXT",
+  "next_gate": "G1",
+  "next_workstream": "CHAT-12",
+  "next_action": "Integrate CI reproducibility and prove a clean-checkout reproducible canonical baseline before any other workstream.",
+  "canonical_repo": {
+    "repository": "tigpetryan-rgb/Virtual-Android",
+    "repository_id": "1354696531",
+    "visibility": "private",
+    "default_branch": "main",
+    "initial_inventory": "EMPTY",
+    "initialization_commit_sha": "fe9b4d20669a638890bf5d7144ef1ef0f543324b",
+    "g0_status": "PASS",
+    "cleanup": "No conflicting legacy code/docs existed at initial inventory."
+  },
+  "google_drive": {
+    "folder_name": "Virtual Android",
+    "folder_id": "1Rx2_K1pc5Ty_AWBK5slOlVeq3fTsNVfh",
+    "all_13_result_artifacts_archived": true
+  },
+  "status_rules": {
+    "RESULT_ARCHIVED": "Artifact exists; not proof of canonical integration.",
+    "INTEGRATED": "Merged into canonical repo and survives canonical build/tests.",
+    "DEVICE_ACCEPTED": "Passed defined physical ARM64 Android acceptance.",
+    "DONE": "All required integration and acceptance gates passed."
+  },
+  "workstreams": [
+    {"id":"CHAT-01","name":"P1 device acceptance","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G2"},
+    {"id":"CHAT-02","name":"AOSP/framework","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G3"},
+    {"id":"CHAT-03","name":"display hardening","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G4"},
+    {"id":"CHAT-04","name":"deterministic input","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G4"},
+    {"id":"CHAT-05","name":"AI agent","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G9"},
+    {"id":"CHAT-06","name":"secure RPC","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G7"},
+    {"id":"CHAT-07","name":"storage/snapshots","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G5"},
+    {"id":"CHAT-08","name":"network isolation","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G6"},
+    {"id":"CHAT-09","name":"performance","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G11"},
+    {"id":"CHAT-10","name":"AVF/pKVM backend","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G10"},
+    {"id":"CHAT-11","name":"lifecycle hardening","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G8"},
+    {"id":"CHAT-12","name":"CI reproducibility","artifact_status":"RESULT_ARCHIVED","integration":"NEXT","gate":"G1"},
+    {"id":"CHAT-13","name":"threat model","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G12"}
+  ],
+  "gates": {
+    "G0":"PASS",
+    "G1":"NEXT",
+    "G2":"PENDING",
+    "G3":"PENDING",
+    "G4":"PENDING",
+    "G5":"PENDING",
+    "G6":"PENDING",
+    "G7":"PENDING",
+    "G8":"PENDING",
+    "G9":"PENDING",
+    "G10":"PENDING",
+    "G11":"PENDING",
+    "G12":"PENDING",
+    "G13":"PENDING"
+  },
+  "authority_order": [
+    "explicit_user_plan_change",
+    "VIRTUAL_ANDROID_MASTER_PLAN.md",
+    "PROJECT_STATE.json_with_live_evidence",
+    "canonical_github_default_branch_and_CI",
+    "drive_result_artifacts",
+    "task_handoffs",
+    "older_chat_summaries"
+  ],
+  "change_log": [
+    {"version":"1.0.0","date":"2026-09-02","change":"Initial canonical strict plan."},
+    {"version":"1.0.1","date":"2026-09-02","change":"G0 complete; canonical repo established; next gate G1."}
+  ]
+}
