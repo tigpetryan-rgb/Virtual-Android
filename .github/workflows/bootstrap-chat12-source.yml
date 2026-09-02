@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - 'baseline/IMPORT_READY'
+  pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -14,29 +16,52 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
       - name: Reconstruct and verify CHAT-12 source release
         shell: bash
         run: |
           set -euo pipefail
-          cat baseline/parts/*.b64 | base64 -d > /tmp/chat12-source.zip
+          test -f baseline/IMPORT_READY
+          python3 baseline/reconstruct_chat12_source.py --output /tmp/chat12-source.zip
           echo 'fdf40b01bc1dd3cc68b39fa118aab9b312683756126df63c25b71bce15d086a1  /tmp/chat12-source.zip' | sha256sum -c -
+          unzip -tq /tmp/chat12-source.zip
+
           rm -rf /tmp/chat12-extracted /tmp/va-governance
           mkdir -p /tmp/chat12-extracted /tmp/va-governance
           cp README.md AGENTS.md VIRTUAL_ANDROID_MASTER_PLAN.md PROJECT_STATE.json /tmp/va-governance/
           unzip -q /tmp/chat12-source.zip -d /tmp/chat12-extracted
           SRC="$(find /tmp/chat12-extracted -mindepth 1 -maxdepth 1 -type d | head -1)"
           test -n "$SRC"
-          mkdir -p docs evidence/CHAT-12
+          test -f "$SRC/README.md"
           cp "$SRC/README.md" /tmp/BASELINE_CHAT12_README.md
+
+          # Replace the staging tree completely, retaining only .git and canonical governance.
+          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
           cp -a "$SRC"/. .
+
+          mkdir -p docs evidence/CHAT-12
           cp /tmp/va-governance/README.md README.md
           cp /tmp/va-governance/AGENTS.md AGENTS.md
           cp /tmp/va-governance/VIRTUAL_ANDROID_MASTER_PLAN.md VIRTUAL_ANDROID_MASTER_PLAN.md
           cp /tmp/va-governance/PROJECT_STATE.json PROJECT_STATE.json
           cp /tmp/BASELINE_CHAT12_README.md docs/BASELINE_CHAT12_README.md
           printf '%s  %s\n' 'fdf40b01bc1dd3cc68b39fa118aab9b312683756126df63c25b71bce15d086a1' 'CHAT-12 deterministic source release' > evidence/CHAT-12/SOURCE_RELEASE_SHA256.txt
-          rm -rf baseline/parts baseline/IMPORT_READY
+          cat > evidence/CHAT-12/INTEGRITY_REPAIR_PROOF.txt <<'EOF'
+          CHAT-12 integrity repair proof
+          expected_sha256=fdf40b01bc1dd3cc68b39fa118aab9b312683756126df63c25b71bce15d086a1
+          diagnostic_run_id=33672125749
+          zip_entries=109
+          zip_testzip=None
+          repair_0011=replace nominal second half
+          repair_0021=replace nominal second half
+          repair_0031=replace nominal second half
+          part004_delete_relative=16995:i
+          part006_insert_relative=0:3
+          part007_insert_relative=0:l
+          part007_replace_relative=8282:U->E
+          final_sha256=fdf40b01bc1dd3cc68b39fa118aab9b312683756126df63c25b71bce15d086a1
+          EOF
           rm -f .github/workflows/bootstrap-chat12-source.yml
       - name: Commit canonical G1 baseline
         shell: bash
