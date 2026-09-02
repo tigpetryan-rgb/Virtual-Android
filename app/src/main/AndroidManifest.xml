@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Detection only. required=false keeps the APK installable on non-AVF devices. -->
+    <uses-feature
+        android:name="android.software.virtualization_framework"
+        android:required="false" />
+
+    <application
+        android:allowBackup="false"
+        android:label="Virtual Android Prototype"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.VirtualAndroid">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- QEMU/TCG lives in a separate Linux process from the UI. -->
+        <service
+            android:name=".vm.VmService"
+            android:exported="false"
+            android:process=":vm"
+            android:stopWithTask="true" />
+    </application>
+</manifest>

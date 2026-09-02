@@ -1,0 +1,653 @@
+{
+  "baseline": "virtual-android-prototype-v0.7",
+  "format": 1,
+  "gates": {
+    "apk_compile": {
+      "requirement": "Android debug APK compile",
+      "state": "NOT_VERIFIED"
+    },
+    "device_farm_smoke": {
+      "requirement": "Optional real-device/device-farm smoke run",
+      "state": "NOT_VERIFIED"
+    },
+    "fake_rfb": {
+      "requirement": "Loopback fake-RFB protocol integration test",
+      "state": "NOT_VERIFIED"
+    },
+    "native_16k": {
+      "requirement": "16 KiB PT_LOAD verifier for native APK ELF files",
+      "state": "NOT_VERIFIED"
+    },
+    "p1_physical": {
+      "requirement": "Fresh P1 physical-device acceptance proof",
+      "state": "NOT_VERIFIED"
+    },
+    "p2_physical": {
+      "requirement": "Fresh P2 framework-ready physical-device acceptance proof",
+      "state": "NOT_VERIFIED"
+    },
+    "p3_display_physical": {
+      "requirement": "Fresh P3 framebuffer physical-device acceptance proof",
+      "state": "NOT_VERIFIED"
+    },
+    "p3_input_physical": {
+      "requirement": "Deterministic host-input to guest-ack physical proof",
+      "state": "NOT_VERIFIED"
+    },
+    "pure_kotlin_jvm": {
+      "requirement": "Pure Kotlin/JVM topology tests",
+      "state": "NOT_VERIFIED"
+    },
+    "qemu_dependency_closure": {
+      "requirement": "Packaged QEMU DT_NEEDED/hash/alignment closure",
+      "state": "NOT_VERIFIED"
+    },
+    "source_checks": {
+      "requirement": "Shell/Python/XML/YAML checks and source invariants",
+      "state": "NOT_VERIFIED"
+    }
+  },
+  "profile": "ci-reproducibility",
+  "project": "Virtual Android",
+  "reporting_contract": {
+    "not_verified_value": "NOT_VERIFIED",
+    "physical_pass_requires_fresh_same_run_proof": true,
+    "verified_value": "VERIFIED"
+  },
+  "runtime_artifacts": {
+    "qemu": {
+      "reason": "No imported QEMU runtime manifest is present in this source snapshot",
+      "state": "NOT_VERIFIED"
+    }
+  },
+  "source_date_epoch": 1788220800,
+  "source_inventory": {
+    "file_count": 107,
+    "filelist_sha256": "6a6939bc05b4e922d9c137f3092f1687c04b463a3278dd6ad59b7e146c785135",
+    "files": [
+      {
+        "bytes": 1472,
+        "path": ".github/workflows/android-compile.yml",
+        "sha256": "46d0c753e40e7fbe82138314facaf12bef9431489ac2ba5c5a4822ec981300c5"
+      },
+      {
+        "bytes": 874,
+        "path": ".github/workflows/build-p1-kernel.yml",
+        "sha256": "7ec6359bdb44e978833067b0440c0a195ac0038336290145aa36692847a56376"
+      },
+      {
+        "bytes": 959,
+        "path": ".github/workflows/device-smoke.yml",
+        "sha256": "87a52d2cae0f7e8569f09dbe169561083579ba029a1d5da641369c2a759de0f5"
+      },
+      {
+        "bytes": 1381,
+        "path": ".github/workflows/release-package.yml",
+        "sha256": "9a8760f58c7cf9742f0ba98db715c5a900297d4f03d57d665bd368dd872ba8bd"
+      },
+      {
+        "bytes": 1503,
+        "path": ".github/workflows/source-checks.yml",
+        "sha256": "002fffe27f9ea70f6c2151f90142c405e2e8670d54c488f485bfe6b86351fa27"
+      },
+      {
+        "bytes": 130,
+        "path": ".gitignore",
+        "sha256": "a2fd2449f3a976fbc8e56d002bbcef6f94783872df1bd90d2a0771b7e953d72a"
+      },
+      {
+        "bytes": 2512,
+        "path": "BUILD_STATUS.md",
+        "sha256": "fe06159c0174cee0e3655dc5b54187f125200fc9be4db2a7cdc9b514c9ddfae7"
+      },
+      {
+        "bytes": 5091,
+        "path": "CHANGELOG.md",
+        "sha256": "e1faa035ca72bba6c3530b962b0392ce3e3444e9dc527bafed315c26bcf2693b"
+      },
+      {
+        "bytes": 3556,
+        "path": "README.md",
+        "sha256": "5fe52e441c67dea121cffeaaab51f4d0778c9dc011c76094d6a5771339583be0"
+      },
+      {
+        "bytes": 1358,
+        "path": "app/build.gradle.kts",
+        "sha256": "2604097c43f85f13f0083ac0525d2069e47609c60643b1e5ff5a50541f8c9023"
+      },
+      {
+        "bytes": 1174,
+        "path": "app/src/main/AndroidManifest.xml",
+        "sha256": "149266c96172b313f208efbac5e187633113d4d04b47fa1c38b257a4e4e9f62a"
+      },
+      {
+        "bytes": 153,
+        "path": "app/src/main/aidl/com/example/virtualandroid/vm/IVmCallback.aidl",
+        "sha256": "99827b1e2e3cee72a1bf787ccd9ebeca5f16ed9e90e0f5b5ff83f2c69e32c864"
+      },
+      {
+        "bytes": 405,
+        "path": "app/src/main/aidl/com/example/virtualandroid/vm/IVmService.aidl",
+        "sha256": "e314cccb1eea6a376cd8389a928a58db04a9ff896ffff01fc9b559ad9087c66f"
+      },
+      {
+        "bytes": 152,
+        "path": "app/src/main/assets/p1/README.txt",
+        "sha256": "172a47be51fc7a2e51b30249ddc397bf34c76f8ee2acf9182da20cb73cedcc72"
+      },
+      {
+        "bytes": 565,
+        "path": "app/src/main/assets/p1/initramfs.cpio.gz",
+        "sha256": "f2bafc95e9e51e550ae2c1e200a12fb3310f0fd57664a7dc55a54787f2ce986c"
+      },
+      {
+        "bytes": 396,
+        "path": "app/src/main/cpp/CMakeLists.txt",
+        "sha256": "cb13e920d2a350d8e159d0dd4a859d67bcf9a4e25e599b312cf114e95e0fabe1"
+      },
+      {
+        "bytes": 4584,
+        "path": "app/src/main/cpp/native_probe.cpp",
+        "sha256": "c997d89f9bc1f6fef5c6c49183b3b974897c8676997ba77d03a48abe9416432b"
+      },
+      {
+        "bytes": 10151,
+        "path": "app/src/main/java/com/example/virtualandroid/MainActivity.kt",
+        "sha256": "86161fd2f7b6627d5a2bdccaa29f89ea2abb5761a410fa6f49dabaa39262002f"
+      },
+      {
+        "bytes": 1744,
+        "path": "app/src/main/java/com/example/virtualandroid/core/CapabilityProbe.kt",
+        "sha256": "cb45cbba904d089d9d403235d4af4a03bda51d86b3cdff411d9428c30b3de8c7"
+      },
+      {
+        "bytes": 1583,
+        "path": "app/src/main/java/com/example/virtualandroid/core/CapabilityReport.kt",
+        "sha256": "f78daf46a9e85c1c28bd478314669220abe069ca18bc5f3d6184cf4be248ecad"
+      },
+      {
+        "bytes": 1637,
+        "path": "app/src/main/java/com/example/virtualandroid/core/EngineSelector.kt",
+        "sha256": "37ca6daa69f6d7323829e4913caf12a599b57c1582a96d621c94e1b138ea2c52"
+      },
+      {
+        "bytes": 296,
+        "path": "app/src/main/java/com/example/virtualandroid/core/NativeProbe.kt",
+        "sha256": "dbf85bc8593c0a88a7ecc30777cc964f7b8d886d370a4c2ceae49064701d6ed8"
+      },
+      {
+        "bytes": 6304,
+        "path": "app/src/main/java/com/example/virtualandroid/display/GuestDisplayView.kt",
+        "sha256": "a9c646df13f4e8e9123eadd63386f0880fe0b245fa29fd0ef4a7c27c0d639173"
+      },
+      {
+        "bytes": 1981,
+        "path": "app/src/main/java/com/example/virtualandroid/display/P3DisplayReportStore.kt",
+        "sha256": "36080ed5719c00896161e2351c231fca06c6d8076a04d6b1584e8a033ad33cfe"
+      },
+      {
+        "bytes": 9663,
+        "path": "app/src/main/java/com/example/virtualandroid/display/RfbProtocol.kt",
+        "sha256": "26386d650b18925bc2a560b31c872186b24c34fda7186125435f9c812dbcdffc"
+      },
+      {
+        "bytes": 1603,
+        "path": "app/src/main/java/com/example/virtualandroid/vm/GuestAssetInstaller.kt",
+        "sha256": "f431a9981ce5ebc08235121bb4b717701d6596a2cf92475be21f47658392ae61"
+      },
+      {
+        "bytes": 684,
+        "path": "app/src/main/java/com/example/virtualandroid/vm/P1ReportStore.kt",
+        "sha256": "11470b4ef0e16ede573f79ff0cecb7858611141cb7536b42cf463a868bc72942"
+      },
+      {
+        "bytes": 4111,
+        "path": "app/src/main/java/com/example/virtualandroid/vm/P1RunReport.kt",
+        "sha256": "6f673173a44302a6ca10f303a6e276f2946b22b459840ce3753364ae7919cd53"
+      },
+      {
+        "bytes": 857,
+        "path": "app/src/main/java/com/example/virtualandroid/vm/P2BootStage.kt",
+        "sha256": "ef3a083a712f12c963c66d3879d8a98e437e6ad097f1e6de9dbeb342b7e594e8"
+      },
+      {
+        "bytes": 259,
+        "path": "app/src/main/java/com/example/virtualandroid/vm/P2GuestArtifacts.kt",
+        "sha256": "739f1703bfd793af214fa4b7ddf42dfa168294a83edb7aa66fa6d07c11ff4bac"
+      },
+      {
+        "bytes": 2698,
+        "path": "app/src/main/java/com/example/virtualandroid/vm/P2GuestInstaller.kt",
+        "sha256": "be6f928a0815217a56567fdc73c48f33a84738fbc0d5629b429a3513aab9b514"
+      },
+      {
+        "bytes": 1774,
+        "path": "app/src/main/java/com/example/virtualandroid/vm/P2QemuArgs.kt",
+        "sha256": "ae729d501ab70dc37b10ad4dc57f86324ceec8397d23893c2413a66f52058ae1"
+      },
+      {
+        "bytes": 595,
+        "path": "app/src/main/java/com/example/virtualandroid/vm/P2ReportStore.kt",
+        "sha256": "16af2288399ec392ad860accf230dcb62d6c0f136cf1b594a9af4640a062bf6e"
+      },
+      {
+        "bytes": 5436,
+        "path": "app/src/main/java/com/example/virtualandroid/vm/P2RunReport.kt",
+        "sha256": "8d319a641a886a5e69ec4be1acde6f9140a5f883dd28ddcf716c5f349cc66df6"
+      },
+      {
+        "bytes": 1330,
+        "path": "app/src/main/java/com/example/virtualandroid/vm/P3QemuArgs.kt",
+        "sha256": "fda095e9888ee2fe537e8c69c448b880db5b098849c8475cd0931e73e79c6d0d"
+      },
+      {
+        "bytes": 851,
+        "path": "app/src/main/java/com/example/virtualandroid/vm/QemuArgs.kt",
+        "sha256": "f1a1c8c93a9a88ac0d0c8a18b80b753e18262b474f564adf549767418f1fce48"
+      },
+      {
+        "bytes": 7185,
+        "path": "app/src/main/java/com/example/virtualandroid/vm/QemuProcessLauncher.kt",
+        "sha256": "f8f7867eac7a3631973319bc06dfc4dc7c7d102b0239e40a223718721fddce87"
+      },
+      {
+        "bytes": 3337,
+        "path": "app/src/main/java/com/example/virtualandroid/vm/QemuRuntimeVerifier.kt",
+        "sha256": "24a8c44cd898933cb126c957fba3dffb427bf117562940cdd330780ff3488b53"
+      },
+      {
+        "bytes": 2161,
+        "path": "app/src/main/java/com/example/virtualandroid/vm/VmClient.kt",
+        "sha256": "9c05ab5db25590fd48fd1d07247df4ce5e2cea5ed0c8c9576efb122a409f3807"
+      },
+      {
+        "bytes": 14596,
+        "path": "app/src/main/java/com/example/virtualandroid/vm/VmService.kt",
+        "sha256": "561a52310e27112c3815743086ccc37b9c6c72a78686a86c7b80ef7b32322f24"
+      },
+      {
+        "bytes": 153,
+        "path": "app/src/main/java/com/example/virtualandroid/vm/VmState.kt",
+        "sha256": "9442a1e5fff1643898c47dd239412a48b94e496b4e8c42e53d6e2dc8a6062d1e"
+      },
+      {
+        "bytes": 5243,
+        "path": "app/src/main/res/layout/activity_main.xml",
+        "sha256": "d00667e65866ce7fa274af664e809b29677bf54df88cbc60a79c25976cdc9214"
+      },
+      {
+        "bytes": 84,
+        "path": "app/src/main/res/values/strings.xml",
+        "sha256": "fb1af7e02f2f15689a54318be4e81eb0d25e2bf07512a64b72b298d60535defe"
+      },
+      {
+        "bytes": 234,
+        "path": "app/src/main/res/values/themes.xml",
+        "sha256": "3e7e7003bd87ed66b00270fcd4a254a5ff01ff357e48ec509a7b100518a9e6f3"
+      },
+      {
+        "bytes": 206,
+        "path": "build.gradle.kts",
+        "sha256": "8329ef78e38f1c4e86b67a79acb32ac8de48a76d13e73428e31f6bf6d3c7de6d"
+      },
+      {
+        "bytes": 1356,
+        "path": "config/toolchain.lock.json",
+        "sha256": "4808c4bc1202ca0dfad341a15eb87301b02f00c6c26af3e511e897d6507e10dd"
+      },
+      {
+        "bytes": 7668,
+        "path": "docs/ARCHITECTURE.md",
+        "sha256": "f08d1142bf1411018100eab9984f05065de4ef485ec6fd2c365ac06ebaca14ae"
+      },
+      {
+        "bytes": 1142,
+        "path": "docs/BUILD_MATRIX.md",
+        "sha256": "77ff2c02d3652df644c193e6304bae24a723209b00cbacebf26d8fe728a3a3c5"
+      },
+      {
+        "bytes": 1071,
+        "path": "docs/HOST_16K_PAGES.md",
+        "sha256": "016d6b0762c29057f2319a241144fc9849fbbe2f0e6c3e2c218aceba877bc966"
+      },
+      {
+        "bytes": 4410,
+        "path": "docs/P1_BRINGUP.md",
+        "sha256": "c9d5c03080f8632031d5c6bdd3b074bd6ca2c2ae772b9853ca229d884fa8a688"
+      },
+      {
+        "bytes": 2390,
+        "path": "docs/P1_DEVICE_TEST.md",
+        "sha256": "041e36e498afe8e719bd9f682d8a67d97b8be6a22c1d92f19b425e90842ae985"
+      },
+      {
+        "bytes": 3621,
+        "path": "docs/P1_HOST_BUILD.md",
+        "sha256": "fe2ce50a3ece9bb2e8abf7e93a944350c44ac817e2bf7b25911afc47794821c4"
+      },
+      {
+        "bytes": 570,
+        "path": "docs/P2_ACCEPTANCE.md",
+        "sha256": "56f813779cd807cdf2809f1dc4aee7fa375ad1412ae74e2443f9eb448f0e16a6"
+      },
+      {
+        "bytes": 1272,
+        "path": "docs/P2_AOSP_BUILD.md",
+        "sha256": "20fe470a99cbe1d31ec5718ea43653112f7cfcf056ca05171efdace4a8cae448"
+      },
+      {
+        "bytes": 1729,
+        "path": "docs/P2_ARCHITECTURE.md",
+        "sha256": "543168643cdc801f37b93df1ac39a5e74bb6d1c945a965d101f9acf951ae5772"
+      },
+      {
+        "bytes": 879,
+        "path": "docs/P2_BOOT_DIAGNOSTICS.md",
+        "sha256": "271dce634e0af5e80e050d13e1d31fe716dd23911af84870a4bfc045db1c4658"
+      },
+      {
+        "bytes": 2743,
+        "path": "docs/P3_DISPLAY_INPUT.md",
+        "sha256": "41dabc5b1dc3f0b602a90831776597372c7d79e2c61b2f1e96fd7fcb0aefae71"
+      },
+      {
+        "bytes": 3997,
+        "path": "docs/REPRODUCIBLE_BUILDS.md",
+        "sha256": "9c65ad93ba23cc7cb10b401221b0ea9575110dd493fb9a41fcef7f36eec38399"
+      },
+      {
+        "bytes": 149,
+        "path": "gradle.properties",
+        "sha256": "95fc35a4f931cfed0e59421105d83fa8c146909b6015b3e7ea045f46432636b7"
+      },
+      {
+        "bytes": 1114,
+        "path": "guest/README.md",
+        "sha256": "d02e77ae5eef6ac579580e3a2ca2c74bc3f1881be7d2e2e0d0c811ae4175ea0a"
+      },
+      {
+        "bytes": 915,
+        "path": "guest/p1/README.md",
+        "sha256": "3d8f21fce50a42a7877f8ab1f96d6119a9d78f755d56c0c99656fcddb707557c"
+      },
+      {
+        "bytes": 682,
+        "path": "guest/p1/init.S",
+        "sha256": "d47c63042b039145b7f944a5828c13f55151dc00d16a102f728e6bfda074833c"
+      },
+      {
+        "bytes": 1224,
+        "path": "guest/p1/out/init",
+        "sha256": "83defdfa9a8107601a4a196bea937883e535ec283b2368726ac7476ce31459e9"
+      },
+      {
+        "bytes": 1212,
+        "path": "guest/p2/README.md",
+        "sha256": "10282ca39ea217360ef13b0771697c6aeda5c538da6ef398c98492bd924a8aec"
+      },
+      {
+        "bytes": 518,
+        "path": "guest/p2/aosp-overlay/README.md",
+        "sha256": "fc5740be7334ce7c4aafc307df05c2e27c04ed541b9f6de13569fd7d596d18a0"
+      },
+      {
+        "bytes": 115,
+        "path": "guest/p2/aosp-overlay/device/virtualandroid/fvp/AndroidProducts.mk",
+        "sha256": "b9294ec4bc53dbbfd35a60c9c63011a957dd7cd871c0aaf7bd780241790a08d6"
+      },
+      {
+        "bytes": 714,
+        "path": "guest/p2/aosp-overlay/device/virtualandroid/fvp/init.virtualandroid.rc",
+        "sha256": "a644cb650447c2cde63afa4d3f046a89d591438b8149e1cd265756c81f13efb8"
+      },
+      {
+        "bytes": 586,
+        "path": "guest/p2/aosp-overlay/device/virtualandroid/fvp/va_fvp.mk",
+        "sha256": "472e6e94c877d0f08c48efb720cab6535f63d49480fe7e8f7f7dcaeea14a7d12"
+      },
+      {
+        "bytes": 1037,
+        "path": "host-tests/build.gradle.kts",
+        "sha256": "47eccdc0150f23476cf1afb55ee43d351af1ea51090649b2cb01c22f74a77750"
+      },
+      {
+        "bytes": 477,
+        "path": "native/qemu/QemuEngineContract.kt",
+        "sha256": "3619aef90650d3ce66fabad0bfd3babe953bb41128cf477111ee9058f3d7d15e"
+      },
+      {
+        "bytes": 1090,
+        "path": "native/qemu/README.md",
+        "sha256": "956c497cdcb5f82c39c967e8893a7e3f64f7c27d0db4160dafe6f95c8a9a5a84"
+      },
+      {
+        "bytes": 556,
+        "path": "scripts/adb_collect_p1.sh",
+        "sha256": "8228130e13beafad851c08236df3302e40c95815edec548042a04ed2c298a945"
+      },
+      {
+        "bytes": 967,
+        "path": "scripts/adb_seed_p2.sh",
+        "sha256": "5c9d8c27c1fb369dd5430d1100b15ba42fc3a4ece7f966cf58ec2292cf335d36"
+      },
+      {
+        "bytes": 1776,
+        "path": "scripts/adb_smoke_p1.sh",
+        "sha256": "30e63f5a26f578029fe26f464252dac6382d27332d1bcdf2dd17dfc4a1119b42"
+      },
+      {
+        "bytes": 1541,
+        "path": "scripts/adb_smoke_p2.sh",
+        "sha256": "ac677c514a3dbfcc6820eaaef50e1198f5bf9a2beaa057ae1670e17580b360fd"
+      },
+      {
+        "bytes": 2208,
+        "path": "scripts/adb_smoke_p3.sh",
+        "sha256": "a2a0c5cfc04781e252a89b34ffbe6d72cca431e0a90cfa9b9af3896e370d550a"
+      },
+      {
+        "bytes": 2050,
+        "path": "scripts/build_all_p1.sh",
+        "sha256": "8d881aa74310be0e6a581f7d3d20e2c6abf894454a6368c938530889f5a60fdd"
+      },
+      {
+        "bytes": 777,
+        "path": "scripts/build_p1_initramfs.sh",
+        "sha256": "a19f524ebf6155d4cd781e2113d7894288ad2e6bab7049cb647c76c7f79fbb4b"
+      },
+      {
+        "bytes": 1890,
+        "path": "scripts/build_p1_kernel.sh",
+        "sha256": "2da9b16c01ae2c55df430669ddc79cddd563929d8e340c02ee510cbb2d3cfc0e"
+      },
+      {
+        "bytes": 925,
+        "path": "scripts/build_p2_aosp.sh",
+        "sha256": "5c1e1dcdf500df65133b5e35b7a1c2eeedbbb834b573ad29c769c93b12919b28"
+      },
+      {
+        "bytes": 1449,
+        "path": "scripts/build_termux_qemu_docker.sh",
+        "sha256": "c4cfdb54a789854a2dd379e8fc5ccadb81188662b408470bdd42c2741c208362"
+      },
+      {
+        "bytes": 772,
+        "path": "scripts/check_p1_assets.sh",
+        "sha256": "493d4c4504ceb97c183384be0cc3485ac85d764bc8348cbedb97b06b3312227e"
+      },
+      {
+        "bytes": 1908,
+        "path": "scripts/ci_source_checks.sh",
+        "sha256": "12306a25a31673bce9b6629b57fe7531be5f883e201464f8bcec1038e325ef73"
+      },
+      {
+        "bytes": 441,
+        "path": "scripts/ci_verify_qemu_runtime.sh",
+        "sha256": "d0c006d1044d5d629615983e0ed3b691ff0d62676db920c132b8f2c3c3e29ef0"
+      },
+      {
+        "bytes": 620,
+        "path": "scripts/export_p2_bundle.sh",
+        "sha256": "f7025c60c9ae9aa6cbe6fb7af477121b9208fa95be8eabe58f79fb1727d73ec9"
+      },
+      {
+        "bytes": 5044,
+        "path": "scripts/generate_release_metadata.py",
+        "sha256": "d5b84520fe03c0f5d0bed4e9095f950f24bc5ca6161ca56414db533d5098cb1a"
+      },
+      {
+        "bytes": 809,
+        "path": "scripts/host_smoke_p3.sh",
+        "sha256": "0386db991b1e2d850393503b1bd61af84902739d18314d2391b8f0683ab7779f"
+      },
+      {
+        "bytes": 9218,
+        "path": "scripts/import_qemu_runtime.py",
+        "sha256": "3f813998bbd92951d2b128ada53253abdd6cb779021718d8b1bdc98e0e6a93dc"
+      },
+      {
+        "bytes": 705,
+        "path": "scripts/import_termux_qemu.sh",
+        "sha256": "808073cbbc3b13332acb867c54688724a8c36f542ad7a70471d0de0daef43276"
+      },
+      {
+        "bytes": 833,
+        "path": "scripts/init_p2_aosp_checkout.sh",
+        "sha256": "c8aa7b353f2fdee1b40234b2aa6755deaf1cd61c146680550d0b19363ff05a41"
+      },
+      {
+        "bytes": 407,
+        "path": "scripts/install_p2_aosp_overlay.sh",
+        "sha256": "42ab89480622d5f9f2cc1f5fed5bf7fc140a23047eee4f727fcf56611bb63930"
+      },
+      {
+        "bytes": 523,
+        "path": "scripts/install_termux_qemu_recipe.sh",
+        "sha256": "f92cbd1a8ab6bf07457af90c1814ae165206f20a1e0a167da07fac8fced41e06"
+      },
+      {
+        "bytes": 1463,
+        "path": "scripts/make_p1_initramfs.py",
+        "sha256": "e252abae80765a97cf21e613977ba153accaa724ffd70a7005c2ca3bf75fca0d"
+      },
+      {
+        "bytes": 2276,
+        "path": "scripts/package_release.py",
+        "sha256": "2b380a3245ca97c587038a55aa4a104305cd4c7c75799cf0797f195d6647ddc1"
+      },
+      {
+        "bytes": 1536,
+        "path": "scripts/release_common.py",
+        "sha256": "67ab2d82bd00934af77f117fad7e990595ff3bdd18d20eabf6dfb198b0088772"
+      },
+      {
+        "bytes": 3106,
+        "path": "scripts/validate_release_tree.py",
+        "sha256": "bf79e0542aadf3126b6b041188c2d1ec62340ce7c93bd34494718bbe420a2458"
+      },
+      {
+        "bytes": 1604,
+        "path": "scripts/verify_elf_16k.py",
+        "sha256": "cc09530f047b0983caf15909e7542961907d27e88ff1612c615f49f642c4dfc2"
+      },
+      {
+        "bytes": 4801,
+        "path": "scripts/verify_packaged_qemu.py",
+        "sha256": "be8b1e990d8af25d4cd6d3de7fddddbd20ed3926d86e32e862577c30ef76f130"
+      },
+      {
+        "bytes": 4798,
+        "path": "scripts/verify_project_source.py",
+        "sha256": "3e2accd212ea7ed62a003cb71b60d1a089e1392fc762b7402c59eb55fc7116a5"
+      },
+      {
+        "bytes": 3435,
+        "path": "scripts/verify_toolchain_lock.py",
+        "sha256": "86ccf9aef94ab47685b967f078f5e0b21d9042b0b51b78db4f74fa213703a3ea"
+      },
+      {
+        "bytes": 366,
+        "path": "settings.gradle.kts",
+        "sha256": "1b33d94ebdb9c4e6866a7f576e432f3753860c9e79213dfe97607237bf265b00"
+      },
+      {
+        "bytes": 1365,
+        "path": "tests/P3PureSmoke.kt",
+        "sha256": "f0401ac89fd3398508b3889ad74c19058837624df0796b1e010f3b8b5f38b874"
+      },
+      {
+        "bytes": 3152,
+        "path": "tests/RfbProtocolSmoke.kt",
+        "sha256": "54c371245b222b99a8c37721d990ab0d6e055bc48b11c0a91b882d14264a665c"
+      },
+      {
+        "bytes": 2802,
+        "path": "tests/test_release_tools.py",
+        "sha256": "3dd58e8df8822204b4960b4fc47d9056d402761423e43fbfe7d6d004532d72c4"
+      },
+      {
+        "bytes": 1644,
+        "path": "third_party/qemu/README.md",
+        "sha256": "7f17dfcf6f220f12e7fed052f21a75de0309737c2a3139d42b410decd31a11fc"
+      },
+      {
+        "bytes": 1079,
+        "path": "third_party/qemu/termux/va-qemu-p1/README.md",
+        "sha256": "3165841c944f338f05d47bb99a720003849b3285cd15869863fa90150ee9cd54"
+      },
+      {
+        "bytes": 3159,
+        "path": "third_party/qemu/termux/va-qemu-p1/build.sh",
+        "sha256": "360db2054ad2c04832ed2990bf9a85b0e8dea1749d21ec322627a3e3ff6122fc"
+      }
+    ]
+  },
+  "toolchains": {
+    "android": {
+      "build_tools": "36.0.0",
+      "cmake": "3.22.1",
+      "compile_sdk": 36,
+      "min_sdk": 26,
+      "ndk": "28.2.13676358",
+      "target_sdk": 36
+    },
+    "android_gradle_plugin": {
+      "version": "8.8.2"
+    },
+    "ci_linux": {
+      "github_runner": "ubuntu-24.04"
+    },
+    "gradle": {
+      "version": "8.10.2"
+    },
+    "java": {
+      "distribution": "temurin",
+      "major": "17"
+    },
+    "kotlin": {
+      "version": "2.1.10"
+    },
+    "p1_linux": {
+      "sha256": "a5f8c5be3fde2d6d9ca14e9631642cf1f44487143f11059da730dcd5892e307a",
+      "url": "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.12.107.tar.xz",
+      "version": "6.12.107"
+    },
+    "p2_aosp": {
+      "manifest_tag": "android-16.0.0_r2",
+      "manifest_url": "https://android.googlesource.com/platform/manifest"
+    },
+    "python_ci_yaml_parser": {
+      "package": "PyYAML",
+      "version": "6.0.3"
+    },
+    "qemu": {
+      "sha256": "a3717477d8e2c84d630bfffbc20f6cd3293eb45aa1e6dac6d0cc27689991c9e1",
+      "url": "https://download.qemu.org/qemu-10.2.1.tar.xz",
+      "version": "10.2.1"
+    },
+    "termux_packages": {
+      "commit": "a100a7bb9a9ea5eab8c54523f4a835ebb7437126",
+      "repository": "https://github.com/termux/termux-packages.git"
+    }
+  }
+}

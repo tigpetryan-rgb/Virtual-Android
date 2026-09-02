@@ -1,0 +1,49 @@
+name: android-compile
+on:
+  push:
+    paths:
+      - app/**
+      - config/**
+      - scripts/**
+      - build.gradle.kts
+      - settings.gradle.kts
+      - gradle.properties
+      - .github/workflows/android-compile.yml
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  debug-apk:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Install pinned Android toolchain
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager \
+            "platforms;android-36" \
+            "build-tools;36.0.0" \
+            "ndk;28.2.13676358" \
+            "cmake;3.22.1"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: Compile debug APK
+        run: gradle --no-daemon :app:assembleDebug
+      - name: Verify JNI ELF 16 KiB compatibility
+        run: |
+          SO=$(find app/build -type f -name libvaprobes.so | head -1)
+          test -n "$SO"
+          python3 scripts/verify_elf_16k.py "$SO"
+      - name: Verify QEMU dependency/hash closure when imported
+        run: ./scripts/ci_verify_qemu_runtime.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: virtual-android-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error

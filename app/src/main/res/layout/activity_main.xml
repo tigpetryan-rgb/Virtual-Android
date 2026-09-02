@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <Button
+            android:id="@+id/runProbe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Run capability probe" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/startP1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="Start P1" />
+
+            <Button
+                android:id="@+id/stopVm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="Stop VM" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/copyP1Proof"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Copy latest P1 proof JSON" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/startP2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="Start P2 AOSP" />
+
+            <Button
+                android:id="@+id/copyP2Proof"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Copy P2 proof" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/startP3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="Start P3 UI" />
+
+            <Button
+                android:id="@+id/copyP3Proof"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Copy P3 proof" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/vmState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:text="VM: disconnected"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/displayStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="P3 display: disconnected" />
+
+        <com.example.virtualandroid.display.GuestDisplayView
+            android:id="@+id/guestDisplay"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="8dp"
+            android:background="#000000"
+            android:contentDescription="Virtual Android guest display"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:text="Host capability report"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/report"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:paddingTop="8dp"
+            android:textIsSelectable="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:text="VM serial / host log"
+            android:textStyle="bold" />
+
+        <ScrollView
+            android:id="@+id/logScroll"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:fillViewport="true">
+
+            <TextView
+                android:id="@+id/vmLog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:textIsSelectable="true" />
+        </ScrollView>
+    </LinearLayout>
+</ScrollView>

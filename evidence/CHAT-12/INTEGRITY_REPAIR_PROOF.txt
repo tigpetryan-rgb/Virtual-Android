@@ -1,0 +1,13 @@
+CHAT-12 integrity repair proof
+expected_sha256=fdf40b01bc1dd3cc68b39fa118aab9b312683756126df63c25b71bce15d086a1
+diagnostic_run_id=33672125749
+zip_entries=109
+zip_testzip=None
+repair_0011=replace nominal second half
+repair_0021=replace nominal second half
+repair_0031=replace nominal second half
+part004_delete_relative=16995:i
+part006_insert_relative=0:3
+part007_insert_relative=0:l
+part007_replace_relative=8282:U->E
+final_sha256=fdf40b01bc1dd3cc68b39fa118aab9b312683756126df63c25b71bce15d086a1

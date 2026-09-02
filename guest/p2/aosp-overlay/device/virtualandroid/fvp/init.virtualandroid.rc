@@ -1,0 +1,19 @@
+# Deterministic serial-console acceptance markers for the APK-side runner.
+# init itself performs the writes, avoiding a helper shell/SELinux domain.
+
+on post-fs-data
+    write /dev/console "VA_P2_ANDROID_INIT_OK\n"
+    write /dev/kmsg "<6>VA_P2_ANDROID_INIT_OK\n"
+
+on property:init.svc.servicemanager=running
+    write /dev/console "VA_P2_SERVICEMANAGER_OK\n"
+    write /dev/kmsg "<6>VA_P2_SERVICEMANAGER_OK\n"
+
+on property:init.svc.zygote=running
+    write /dev/console "VA_P2_ZYGOTE_OK\n"
+    write /dev/kmsg "<6>VA_P2_ZYGOTE_OK\n"
+
+on property:sys.boot_completed=1
+    write /dev/console "VA_P2_FRAMEWORK_OK\n"
+    write /dev/kmsg "<6>VA_P2_FRAMEWORK_OK\n"
+    setprop persist.virtualandroid.framework_ready 1

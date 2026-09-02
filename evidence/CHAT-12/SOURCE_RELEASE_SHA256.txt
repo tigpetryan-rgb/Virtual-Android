@@ -1,0 +1,1 @@
+fdf40b01bc1dd3cc68b39fa118aab9b312683756126df63c25b71bce15d086a1  CHAT-12 deterministic source release

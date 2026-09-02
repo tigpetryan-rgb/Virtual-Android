@@ -1,0 +1,52 @@
+{
+  "format": 1,
+  "source_date_epoch": 1788220800,
+  "toolchains": {
+    "ci_linux": {
+      "github_runner": "ubuntu-24.04"
+    },
+    "java": {
+      "distribution": "temurin",
+      "major": "17"
+    },
+    "gradle": {
+      "version": "8.10.2"
+    },
+    "android_gradle_plugin": {
+      "version": "8.8.2"
+    },
+    "kotlin": {
+      "version": "2.1.10"
+    },
+    "android": {
+      "compile_sdk": 36,
+      "target_sdk": 36,
+      "min_sdk": 26,
+      "build_tools": "36.0.0",
+      "ndk": "28.2.13676358",
+      "cmake": "3.22.1"
+    },
+    "p1_linux": {
+      "version": "6.12.107",
+      "sha256": "a5f8c5be3fde2d6d9ca14e9631642cf1f44487143f11059da730dcd5892e307a",
+      "url": "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.12.107.tar.xz"
+    },
+    "p2_aosp": {
+      "manifest_url": "https://android.googlesource.com/platform/manifest",
+      "manifest_tag": "android-16.0.0_r2"
+    },
+    "qemu": {
+      "version": "10.2.1",
+      "sha256": "a3717477d8e2c84d630bfffbc20f6cd3293eb45aa1e6dac6d0cc27689991c9e1",
+      "url": "https://download.qemu.org/qemu-10.2.1.tar.xz"
+    },
+    "termux_packages": {
+      "repository": "https://github.com/termux/termux-packages.git",
+      "commit": "a100a7bb9a9ea5eab8c54523f4a835ebb7437126"
+    },
+    "python_ci_yaml_parser": {
+      "package": "PyYAML",
+      "version": "6.0.3"
+    }
+  }
+}
