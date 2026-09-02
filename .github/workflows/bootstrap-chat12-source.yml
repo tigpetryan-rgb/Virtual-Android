@@ -27,20 +27,29 @@ jobs:
           echo 'fdf40b01bc1dd3cc68b39fa118aab9b312683756126df63c25b71bce15d086a1  /tmp/chat12-source.zip' | sha256sum -c -
           unzip -tq /tmp/chat12-source.zip
 
-          rm -rf /tmp/chat12-extracted /tmp/va-governance
-          mkdir -p /tmp/chat12-extracted /tmp/va-governance
+          rm -rf /tmp/chat12-extracted /tmp/va-governance /tmp/current-workflows
+          mkdir -p /tmp/chat12-extracted /tmp/va-governance /tmp/current-workflows
           cp README.md AGENTS.md VIRTUAL_ANDROID_MASTER_PLAN.md PROJECT_STATE.json /tmp/va-governance/
+          cp -a .github/workflows/. /tmp/current-workflows/
           unzip -q /tmp/chat12-source.zip -d /tmp/chat12-extracted
           SRC="$(find /tmp/chat12-extracted -mindepth 1 -maxdepth 1 -type d | head -1)"
           test -n "$SRC"
           test -f "$SRC/README.md"
           cp "$SRC/README.md" /tmp/BASELINE_CHAT12_README.md
 
-          # Replace the staging tree completely, retaining only .git and canonical governance.
+          # Replace staging with the proven source tree. Workflow paths are restored exactly
+          # to the pre-run main state so this GitHub App push does not modify workflow files.
           find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
           cp -a "$SRC"/. .
 
-          mkdir -p docs evidence/CHAT-12
+          mkdir -p docs evidence/CHAT-12/workflow-snapshots .github/workflows
+          if [ -d .github/workflows ]; then
+            cp -a .github/workflows/. evidence/CHAT-12/workflow-snapshots/
+          fi
+          rm -rf .github/workflows
+          mkdir -p .github/workflows
+          cp -a /tmp/current-workflows/. .github/workflows/
+
           cp /tmp/va-governance/README.md README.md
           cp /tmp/va-governance/AGENTS.md AGENTS.md
           cp /tmp/va-governance/VIRTUAL_ANDROID_MASTER_PLAN.md VIRTUAL_ANDROID_MASTER_PLAN.md
@@ -62,8 +71,7 @@ jobs:
           part007_replace_relative=8282:U->E
           final_sha256=fdf40b01bc1dd3cc68b39fa118aab9b312683756126df63c25b71bce15d086a1
           EOF
-          rm -f .github/workflows/bootstrap-chat12-source.yml
-      - name: Commit canonical G1 baseline
+      - name: Commit canonical source tree without workflow-path changes
         shell: bash
         run: |
           set -euo pipefail
@@ -71,5 +79,10 @@ jobs:
           git config user.email 'virtual-android-bootstrap@users.noreply.github.com'
           git add -A
           git diff --cached --check
-          git commit -m 'G1/CHAT-12: materialize reproducible baseline'
+          if ! git diff --cached --quiet -- .github/workflows; then
+            echo 'ERROR: materialization must not modify .github/workflows in this push' >&2
+            git diff --cached -- .github/workflows
+            exit 1
+          fi
+          git commit -m 'G1/CHAT-12: materialize reproducible baseline source tree'
           git push origin HEAD:main
