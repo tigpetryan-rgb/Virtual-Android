@@ -6,6 +6,7 @@ on:
       - '.github/workflows/g1-chat12-integrity-diagnostic.yml'
       - 'baseline/parts/**'
       - 'baseline/repair/**'
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -90,7 +91,6 @@ jobs:
                   opts.append(('concat01', r0 + r1))
                   if len(r0) + len(r1) <= len(original):
                       opts.append(('ends01', r0 + original[len(r0):len(original)-len(r1)] + r1))
-                  # Treat repair names as first/second 10k half payloads, preserving uncovered bytes.
                   first = original[:10000]
                   second = original[10000:]
                   first_overlay = r0 + first[len(r0):] if len(r0) <= len(first) else r0
