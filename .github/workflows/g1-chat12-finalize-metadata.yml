@@ -1,6 +1,7 @@
 name: g1-chat12-finalize-metadata
 
 on:
+  pull_request:
   push:
     branches:
       - g1-chat12-finalize-metadata
@@ -39,5 +40,3 @@ jobs:
           git diff --cached --check
           git commit -m 'G1/CHAT-12: regenerate finalization metadata'
           git push origin HEAD:g1-chat12-finalize-metadata
-
-# trigger: final G1 metadata regeneration
