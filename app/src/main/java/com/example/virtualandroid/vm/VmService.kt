@@ -25,7 +25,7 @@ class VmService : Service() {
     private lateinit var launcher: QemuProcessLauncher
 
     @Volatile
-    private var state = VmState.IDLE
+    private var vmState = VmState.IDLE
 
     override fun onCreate() {
         super.onCreate()
@@ -35,7 +35,7 @@ class VmService : Service() {
     private val binder = object : IVmService.Stub() {
         override fun registerCallback(callback: IVmCallback?) {
             if (callback != null) callbacks.register(callback)
-            callback?.onStateChanged(state.name, "connected")
+            callback?.onStateChanged(vmState.name, "connected")
         }
 
         override fun unregisterCallback(callback: IVmCallback?) {
@@ -43,8 +43,8 @@ class VmService : Service() {
         }
 
         override fun startP1Guest(memoryMiB: Int, vcpus: Int) {
-            if (state in setOf(VmState.PREPARING, VmState.STARTING, VmState.RUNNING, VmState.STOPPING)) {
-                emitLog("Start ignored: VM is already $state")
+            if (vmState in setOf(VmState.PREPARING, VmState.STARTING, VmState.RUNNING, VmState.STOPPING)) {
+                emitLog("Start ignored: VM is already $vmState")
                 return
             }
             val token = runGeneration.incrementAndGet()
@@ -52,8 +52,8 @@ class VmService : Service() {
         }
 
         override fun startP2Guest(memoryMiB: Int, vcpus: Int) {
-            if (state in setOf(VmState.PREPARING, VmState.STARTING, VmState.RUNNING, VmState.STOPPING)) {
-                emitLog("P2 start ignored: VM is already $state")
+            if (vmState in setOf(VmState.PREPARING, VmState.STARTING, VmState.RUNNING, VmState.STOPPING)) {
+                emitLog("P2 start ignored: VM is already $vmState")
                 return
             }
             if (!P1ReportStore.latestPassed(this@VmService)) {
@@ -65,8 +65,8 @@ class VmService : Service() {
         }
 
         override fun startP3Guest(memoryMiB: Int, vcpus: Int) {
-            if (state in setOf(VmState.PREPARING, VmState.STARTING, VmState.RUNNING, VmState.STOPPING)) {
-                emitLog("P3 start ignored: VM is already $state")
+            if (vmState in setOf(VmState.PREPARING, VmState.STARTING, VmState.RUNNING, VmState.STOPPING)) {
+                emitLog("P3 start ignored: VM is already $vmState")
                 return
             }
             if (!P2ReportStore.latestPassed(this@VmService)) {
@@ -81,8 +81,8 @@ class VmService : Service() {
             // Invalidates PREPARING/STARTING work before touching the process.
             runGeneration.incrementAndGet()
             controlExecutor.execute {
-                if (state == VmState.IDLE || state == VmState.STOPPED) {
-                    emitLog("Stop ignored: VM is $state")
+                if (vmState == VmState.IDLE || vmState == VmState.STOPPED) {
+                    emitLog("Stop ignored: VM is $vmState")
                     return@execute
                 }
                 setState(VmState.STOPPING, "stop requested")
@@ -92,7 +92,7 @@ class VmService : Service() {
             }
         }
 
-        override fun getState(): String = state.name
+        override fun getState(): String = vmState.name
     }
 
     override fun onBind(intent: Intent?): IBinder = binder
@@ -332,7 +332,7 @@ class VmService : Service() {
     }
 
     private fun setState(newState: VmState, detail: String) {
-        state = newState
+        vmState = newState
         synchronized(callbackLock) {
             val n = callbacks.beginBroadcast()
             try {
