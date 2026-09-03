@@ -41,12 +41,14 @@ for path in files:
 print(f'YAML parse: OK ({len(files)} workflow files)')
 PY
 
-printf '== deterministic initramfs ==\n'
-BEFORE="$(mktemp)"
-trap 'rm -f "$BEFORE"' EXIT
-cp "$ROOT/app/src/main/assets/p1/initramfs.cpio.gz" "$BEFORE"
-"$ROOT/scripts/build_p1_initramfs.sh"
-cmp "$BEFORE" "$ROOT/app/src/main/assets/p1/initramfs.cpio.gz"
+printf '== deterministic initramfs packaging ==\n'
+PACK_A="$(mktemp)"
+PACK_B="$(mktemp)"
+trap 'rm -f "$PACK_A" "$PACK_B"' EXIT
+python3 "$ROOT/scripts/make_p1_initramfs.py" "$ROOT/guest/p1/out/init" "$PACK_A"
+python3 "$ROOT/scripts/make_p1_initramfs.py" "$ROOT/guest/p1/out/init" "$PACK_B"
+cmp "$PACK_A" "$PACK_B"
+cmp "$PACK_A" "$ROOT/app/src/main/assets/p1/initramfs.cpio.gz"
 
 printf '== invariants / toolchain / release guards ==\n'
 "$ROOT/scripts/verify_project_source.py"
