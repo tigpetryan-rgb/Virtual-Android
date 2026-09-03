@@ -2,7 +2,7 @@
 
 ## VERIFIED
 
-- ✅ Deterministic P1 initramfs rebuild matches the checked-in artifact byte for byte.
+- ✅ Deterministic P1 initramfs packaging from the checked-in `guest/p1/out/init` binary reproduces the checked-in `initramfs.cpio.gz` byte for byte; host compiler output is not treated as reproducible unless that compiler is separately pinned and verified.
 - ✅ Project architecture/source invariants pass locally.
 - ✅ Shell syntax, Python AST syntax, Android/guest XML parsing and GitHub Actions YAML parsing pass locally.
 - ✅ Central `config/toolchain.lock.json` is consistent with the project-owned Android, Linux, AOSP, QEMU and Termux build inputs.
