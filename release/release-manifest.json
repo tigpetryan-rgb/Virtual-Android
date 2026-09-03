@@ -62,8 +62,8 @@
   },
   "source_date_epoch": 1788220800,
   "source_inventory": {
-    "file_count": 113,
-    "filelist_sha256": "8d06deebf9e66a661b9b2a60e0523b1ebec44ca555ae912734b361f7dd63df40",
+    "file_count": 117,
+    "filelist_sha256": "55ab14a39d896626188fbb4838fa9b5a975fcc674c15e58318b3b7bb0434a74b",
     "files": [
       {
         "bytes": 1472,
@@ -96,14 +96,14 @@
         "sha256": "a2fd2449f3a976fbc8e56d002bbcef6f94783872df1bd90d2a0771b7e953d72a"
       },
       {
-        "bytes": 1652,
+        "bytes": 1585,
         "path": "AGENTS.md",
-        "sha256": "6e993db1b49a41501ec17695d54e67a58c8f0c0f3635f51ca785f0fbce257acf"
+        "sha256": "805e5d6b31a69bedd5d4a890fd37713f139120c0b0844f8aac9dbd9669c77c67"
       },
       {
-        "bytes": 2683,
+        "bytes": 3567,
         "path": "BUILD_STATUS.md",
-        "sha256": "68cce06bdce083cee0e314b40f72df58bcc81377ff2c0d056f6dc6cfe1da65d9"
+        "sha256": "0e26c7978453d9421a42dc505e7233f36da1ecac4f4271cfc393a05f20a8cb5c"
       },
       {
         "bytes": 5091,
@@ -141,9 +141,9 @@
         "sha256": "99827b1e2e3cee72a1bf787ccd9ebeca5f16ed9e90e0f5b5ff83f2c69e32c864"
       },
       {
-        "bytes": 405,
+        "bytes": 419,
         "path": "app/src/main/aidl/com/example/virtualandroid/vm/IVmService.aidl",
-        "sha256": "e314cccb1eea6a376cd8389a928a58db04a9ff896ffff01fc9b559ad9087c66f"
+        "sha256": "bbc39435c4e56a21e7e3edebcf8b05dbf965a38a084bece8b7a3727e71cedbf8"
       },
       {
         "bytes": 152,
@@ -166,9 +166,9 @@
         "sha256": "c997d89f9bc1f6fef5c6c49183b3b974897c8676997ba77d03a48abe9416432b"
       },
       {
-        "bytes": 10151,
+        "bytes": 10418,
         "path": "app/src/main/java/com/example/virtualandroid/MainActivity.kt",
-        "sha256": "86161fd2f7b6627d5a2bdccaa29f89ea2abb5761a410fa6f49dabaa39262002f"
+        "sha256": "88e0791a31d8cea7c3bb29ceca39d8961d24a9f1a8ff813329a83456b0cb6427"
       },
       {
         "bytes": 1744,
@@ -206,19 +206,24 @@
         "sha256": "26386d650b18925bc2a560b31c872186b24c34fda7186125435f9c812dbcdffc"
       },
       {
-        "bytes": 1603,
+        "bytes": 2439,
         "path": "app/src/main/java/com/example/virtualandroid/vm/GuestAssetInstaller.kt",
-        "sha256": "f431a9981ce5ebc08235121bb4b717701d6596a2cf92475be21f47658392ae61"
+        "sha256": "395e43bc02ce2f7bf262d002df6062bff157c70f4e0f6b146c98682adb458a00"
       },
       {
-        "bytes": 684,
+        "bytes": 568,
+        "path": "app/src/main/java/com/example/virtualandroid/vm/P1ProofContract.kt",
+        "sha256": "d5fba00b4e2437f10444b1a02851c0b00c07de9f46018935085fb96e8189664c"
+      },
+      {
+        "bytes": 2086,
         "path": "app/src/main/java/com/example/virtualandroid/vm/P1ReportStore.kt",
-        "sha256": "11470b4ef0e16ede573f79ff0cecb7858611141cb7536b42cf463a868bc72942"
+        "sha256": "40de05cd800503a83748a35b0b6382df93601dbd8fc49ec063c3afb90e3f7613"
       },
       {
-        "bytes": 4111,
+        "bytes": 9860,
         "path": "app/src/main/java/com/example/virtualandroid/vm/P1RunReport.kt",
-        "sha256": "6f673173a44302a6ca10f303a6e276f2946b22b459840ce3753364ae7919cd53"
+        "sha256": "d6f5b327531961ba48ca9fd752ae885cb51df713d1ae3e14f15f756337108b55"
       },
       {
         "bytes": 857,
@@ -261,24 +266,24 @@
         "sha256": "f1a1c8c93a9a88ac0d0c8a18b80b753e18262b474f564adf549767418f1fce48"
       },
       {
-        "bytes": 7178,
+        "bytes": 8602,
         "path": "app/src/main/java/com/example/virtualandroid/vm/QemuProcessLauncher.kt",
-        "sha256": "1b7156dda839657628ba159effd1eb3bcf82cab8568eeb0183b04cd3e8d7b2e4"
+        "sha256": "308d11be73c31790122ee7b350f09798c289eaa8d81aa380fc1fe620ad190cfa"
       },
       {
-        "bytes": 3337,
+        "bytes": 3993,
         "path": "app/src/main/java/com/example/virtualandroid/vm/QemuRuntimeVerifier.kt",
-        "sha256": "24a8c44cd898933cb126c957fba3dffb427bf117562940cdd330780ff3488b53"
+        "sha256": "28bf4adb61d21d6999d2a1cdb668e96cb4ce5fbbb4877ba812d7e83638a1a0a5"
       },
       {
-        "bytes": 2161,
+        "bytes": 2201,
         "path": "app/src/main/java/com/example/virtualandroid/vm/VmClient.kt",
-        "sha256": "9c05ab5db25590fd48fd1d07247df4ce5e2cea5ed0c8c9576efb122a409f3807"
+        "sha256": "af4c4c3ce2deb77eb7534d357bf979c418d9a7b35022ee77fa42c307f0e5f16b"
       },
       {
-        "bytes": 14622,
+        "bytes": 15553,
         "path": "app/src/main/java/com/example/virtualandroid/vm/VmService.kt",
-        "sha256": "f8e7715061508dbe2205b0204034d53e1d9bf4d07fdd583fdeb755d2345af823"
+        "sha256": "5e2e21b3939f38323665e05a7a2d22eda0203876f87d2ce9d62f299818ac0b11"
       },
       {
         "bytes": 153,
@@ -331,19 +336,19 @@
         "sha256": "016d6b0762c29057f2319a241144fc9849fbbe2f0e6c3e2c218aceba877bc966"
       },
       {
-        "bytes": 4410,
+        "bytes": 5668,
         "path": "docs/P1_BRINGUP.md",
-        "sha256": "c9d5c03080f8632031d5c6bdd3b074bd6ca2c2ae772b9853ca229d884fa8a688"
+        "sha256": "ba501de4a359c1359b6f3dba96ba6696d9f0212ecc729ab14950a302cd972777"
       },
       {
-        "bytes": 2390,
+        "bytes": 4961,
         "path": "docs/P1_DEVICE_TEST.md",
-        "sha256": "041e36e498afe8e719bd9f682d8a67d97b8be6a22c1d92f19b425e90842ae985"
+        "sha256": "7ed452498dd4a7181040a88ff73b9158441c84885f0b3743270b729f8a927984"
       },
       {
-        "bytes": 3621,
+        "bytes": 4387,
         "path": "docs/P1_HOST_BUILD.md",
-        "sha256": "fe2ce50a3ece9bb2e8abf7e93a944350c44ac817e2bf7b25911afc47794821c4"
+        "sha256": "d9819d957905826de06463fe4b64f8b0a0008decd8c4ab88a6c441fbb5bb729b"
       },
       {
         "bytes": 570,
@@ -374,6 +379,11 @@
         "bytes": 3997,
         "path": "docs/REPRODUCIBLE_BUILDS.md",
         "sha256": "9c65ad93ba23cc7cb10b401221b0ea9575110dd493fb9a41fcef7f36eec38399"
+      },
+      {
+        "bytes": 368,
+        "path": "evidence/CHAT-01/RESULT_ARCHIVE_SHA256.txt",
+        "sha256": "657fb5fbec23b7d89e6e6fd129495bde85979f8253ab3c4c8b02f2274dc490b1"
       },
       {
         "bytes": 496,
@@ -451,9 +461,9 @@
         "sha256": "956c497cdcb5f82c39c967e8893a7e3f64f7c27d0db4160dafe6f95c8a9a5a84"
       },
       {
-        "bytes": 556,
+        "bytes": 979,
         "path": "scripts/adb_collect_p1.sh",
-        "sha256": "8228130e13beafad851c08236df3302e40c95815edec548042a04ed2c298a945"
+        "sha256": "da9c9a672934c4bc89be5c25ac67160e70bad5a62ad3aed7b865f09de00751c6"
       },
       {
         "bytes": 967,
@@ -461,9 +471,9 @@
         "sha256": "5c9d8c27c1fb369dd5430d1100b15ba42fc3a4ece7f966cf58ec2292cf335d36"
       },
       {
-        "bytes": 1776,
+        "bytes": 3585,
         "path": "scripts/adb_smoke_p1.sh",
-        "sha256": "30e63f5a26f578029fe26f464252dac6382d27332d1bcdf2dd17dfc4a1119b42"
+        "sha256": "f451e1d5ad274efd15ab30a4230cfd11d27fefa3870baafd7471924fdad3ad6d"
       },
       {
         "bytes": 1541,
@@ -506,9 +516,9 @@
         "sha256": "493d4c4504ceb97c183384be0cc3485ac85d764bc8348cbedb97b06b3312227e"
       },
       {
-        "bytes": 2033,
+        "bytes": 2104,
         "path": "scripts/ci_source_checks.sh",
-        "sha256": "2ba24584342154f16fdf47b83671e24f4468e57c0b30fabae2d9e8a97c7cf0fb"
+        "sha256": "a6d5452c0ea9fd73f2bec90f9bc186f69a3641a58f66ba422e6fdc95fcd83541"
       },
       {
         "bytes": 441,
@@ -571,6 +581,11 @@
         "sha256": "67ab2d82bd00934af77f117fad7e990595ff3bdd18d20eabf6dfb198b0088772"
       },
       {
+        "bytes": 6079,
+        "path": "scripts/validate_p1_report.py",
+        "sha256": "fd6cda0de9d8e3326eb7cd25226082651724dcc37c85d7fac153bf91531250de"
+      },
+      {
         "bytes": 3106,
         "path": "scripts/validate_release_tree.py",
         "sha256": "bf79e0542aadf3126b6b041188c2d1ec62340ce7c93bd34494718bbe420a2458"
@@ -586,9 +601,9 @@
         "sha256": "be8b1e990d8af25d4cd6d3de7fddddbd20ed3926d86e32e862577c30ef76f130"
       },
       {
-        "bytes": 4798,
+        "bytes": 6376,
         "path": "scripts/verify_project_source.py",
-        "sha256": "3e2accd212ea7ed62a003cb71b60d1a089e1392fc762b7402c59eb55fc7116a5"
+        "sha256": "9d1c9e9d63b0fc552cd428b7b82596310867e206e3f0a4cd0bcfad6047367453"
       },
       {
         "bytes": 3435,
@@ -609,6 +624,11 @@
         "bytes": 3152,
         "path": "tests/RfbProtocolSmoke.kt",
         "sha256": "54c371245b222b99a8c37721d990ab0d6e055bc48b11c0a91b882d14264a665c"
+      },
+      {
+        "bytes": 4606,
+        "path": "tests/test_p1_report_validator.py",
+        "sha256": "2ab8643965e3f8ae13df0e9f2a6920af791dff0f37444c4a228a1d2e870385d4"
       },
       {
         "bytes": 2802,
