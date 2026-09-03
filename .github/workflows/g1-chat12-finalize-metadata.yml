@@ -30,6 +30,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          git reset --hard
           git fetch origin g1-chat12-finalize-metadata
           git checkout -B g1-chat12-finalize-metadata origin/g1-chat12-finalize-metadata
           cp /tmp/FILELIST.txt FILELIST.txt
