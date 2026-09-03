@@ -105,7 +105,7 @@ class QemuProcessLauncher(private val context: Context) {
 
     fun stop(onLog: (String) -> Unit): Result<Unit> = runCatching {
         val p = process ?: return@runCatching
-        onLog("Stopping QEMU pid=${p.pid()}")
+        onLog("Stopping QEMU process")
         p.destroy()
         if (!p.waitFor(2, TimeUnit.SECONDS)) {
             onLog("QEMU did not exit after SIGTERM; forcing stop")
