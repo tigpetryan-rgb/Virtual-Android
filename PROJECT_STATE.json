@@ -1,12 +1,12 @@
 {
   "project": "Virtual Android",
   "plan_id": "VA-MASTER-PLAN",
-  "plan_version": "1.0.1",
-  "canonical_date": "2026-09-02",
-  "overall_status": "G0_COMPLETE_G1_NEXT",
-  "next_gate": "G1",
-  "next_workstream": "CHAT-12",
-  "next_action": "Integrate CI reproducibility and prove a clean-checkout reproducible canonical baseline before any other workstream.",
+  "plan_version": "1.0.2",
+  "canonical_date": "2026-09-03",
+  "overall_status": "G0_G1_COMPLETE_G2_NEXT",
+  "next_gate": "G2",
+  "next_workstream": "CHAT-01",
+  "next_action": "Begin CHAT-01 P1 physical-device acceptance only after this G1 finalization tree passes canonical source-checks and is merged to main.",
   "canonical_repo": {
     "repository": "tigpetryan-rgb/Virtual-Android",
     "repository_id": "1354696531",
@@ -15,7 +15,25 @@
     "initial_inventory": "EMPTY",
     "initialization_commit_sha": "fe9b4d20669a638890bf5d7144ef1ef0f543324b",
     "g0_status": "PASS",
-    "cleanup": "No conflicting legacy code/docs existed at initial inventory."
+    "g1_status": "PASS",
+    "cleanup": "No conflicting legacy code/docs existed at initial inventory. CHAT-12 staging/repair helpers were removed after canonical materialization."
+  },
+  "g1_evidence": {
+    "source_release_sha256": "fdf40b01bc1dd3cc68b39fa118aab9b312683756126df63c25b71bce15d086a1",
+    "integrity_diagnostic_run_id": 33672125749,
+    "source_zip_entries": 109,
+    "source_zip_testzip": null,
+    "materialization_commit_sha": "d3021d5aa77c539ab756be34665a2b0c7f14f11b",
+    "source_checks_success_run_id": 33709407052,
+    "android_compile_success_run_id": 33709904931,
+    "android_compile_commit_sha": "df64f7dbe45cfb7074cc0cc2797a9d010cb790e4",
+    "android_compile_checks": [
+      "debug APK assemble",
+      "JNI ELF 16 KiB compatibility",
+      "QEMU dependency/hash closure when imported",
+      "APK artifact upload"
+    ],
+    "promotion_rule": "Merge this G1 finalization only after source-checks passes on the exact finalization tree."
   },
   "google_drive": {
     "folder_name": "Virtual Android",
@@ -29,7 +47,7 @@
     "DONE": "All required integration and acceptance gates passed."
   },
   "workstreams": [
-    {"id":"CHAT-01","name":"P1 device acceptance","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G2"},
+    {"id":"CHAT-01","name":"P1 device acceptance","artifact_status":"RESULT_ARCHIVED","integration":"NEXT","gate":"G2"},
     {"id":"CHAT-02","name":"AOSP/framework","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G3"},
     {"id":"CHAT-03","name":"display hardening","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G4"},
     {"id":"CHAT-04","name":"deterministic input","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G4"},
@@ -40,13 +58,13 @@
     {"id":"CHAT-09","name":"performance","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G11"},
     {"id":"CHAT-10","name":"AVF/pKVM backend","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G10"},
     {"id":"CHAT-11","name":"lifecycle hardening","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G8"},
-    {"id":"CHAT-12","name":"CI reproducibility","artifact_status":"RESULT_ARCHIVED","integration":"NEXT","gate":"G1"},
+    {"id":"CHAT-12","name":"CI reproducibility","artifact_status":"RESULT_ARCHIVED","integration":"INTEGRATED","gate":"G1"},
     {"id":"CHAT-13","name":"threat model","artifact_status":"RESULT_ARCHIVED","integration":"PENDING","gate":"G12"}
   ],
   "gates": {
     "G0":"PASS",
-    "G1":"NEXT",
-    "G2":"PENDING",
+    "G1":"PASS",
+    "G2":"NEXT",
     "G3":"PENDING",
     "G4":"PENDING",
     "G5":"PENDING",
@@ -70,6 +88,7 @@
   ],
   "change_log": [
     {"version":"1.0.0","date":"2026-09-02","change":"Initial canonical strict plan."},
-    {"version":"1.0.1","date":"2026-09-02","change":"G0 complete; canonical repo established; next gate G1."}
+    {"version":"1.0.1","date":"2026-09-02","change":"G0 complete; canonical repo established; next gate G1."},
+    {"version":"1.0.2","date":"2026-09-03","change":"G1/CHAT-12 reproducible canonical baseline evidenced; G2/CHAT-01 is next after finalization merge."}
   ]
 }
