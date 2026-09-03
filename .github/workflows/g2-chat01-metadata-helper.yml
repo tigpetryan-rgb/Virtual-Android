@@ -1,0 +1,43 @@
+name: g2-chat01-metadata-helper
+
+on:
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate-g2-metadata:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: g2-chat01-integration
+          fetch-depth: 0
+      - name: Generate metadata from exact G2 integration tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/generate_release_metadata.py
+          cp FILELIST.txt /tmp/FILELIST.txt
+          cp release/release-manifest.json /tmp/release-manifest.json
+      - name: Commit generated metadata to helper branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git reset --hard
+          git clean -fd
+          git fetch origin g2-chat01-metadata-helper
+          git checkout -B g2-chat01-metadata-helper origin/g2-chat01-metadata-helper
+          cp /tmp/FILELIST.txt FILELIST.txt
+          cp /tmp/release-manifest.json release/release-manifest.json
+          git config user.name 'virtual-android-metadata-helper'
+          git config user.email 'virtual-android-metadata-helper@users.noreply.github.com'
+          git add FILELIST.txt release/release-manifest.json
+          git diff --cached --check
+          if git diff --cached --quiet; then
+            echo 'Generated metadata already matches helper branch.'
+            exit 0
+          fi
+          git commit -m 'G2/CHAT-01: regenerate integration metadata'
+          git push origin HEAD:g2-chat01-metadata-helper
