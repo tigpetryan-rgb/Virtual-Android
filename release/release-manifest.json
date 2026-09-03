@@ -62,8 +62,8 @@
   },
   "source_date_epoch": 1788220800,
   "source_inventory": {
-    "file_count": 107,
-    "filelist_sha256": "6a6939bc05b4e922d9c137f3092f1687c04b463a3278dd6ad59b7e146c785135",
+    "file_count": 113,
+    "filelist_sha256": "8f7c19df6e1ea778dcbf414a2638341a9c0442b505a85f662c29cdb3a3faeb81",
     "files": [
       {
         "bytes": 1472,
@@ -96,9 +96,14 @@
         "sha256": "a2fd2449f3a976fbc8e56d002bbcef6f94783872df1bd90d2a0771b7e953d72a"
       },
       {
-        "bytes": 2512,
+        "bytes": 1652,
+        "path": "AGENTS.md",
+        "sha256": "6e993db1b49a41501ec17695d54e67a58c8f0c0f3635f51ca785f0fbce257acf"
+      },
+      {
+        "bytes": 2683,
         "path": "BUILD_STATUS.md",
-        "sha256": "fe06159c0174cee0e3655dc5b54187f125200fc9be4db2a7cdc9b514c9ddfae7"
+        "sha256": "68cce06bdce083cee0e314b40f72df58bcc81377ff2c0d056f6dc6cfe1da65d9"
       },
       {
         "bytes": 5091,
@@ -106,9 +111,19 @@
         "sha256": "e1faa035ca72bba6c3530b962b0392ce3e3444e9dc527bafed315c26bcf2693b"
       },
       {
-        "bytes": 3556,
+        "bytes": 3598,
+        "path": "PROJECT_STATE.json",
+        "sha256": "1641110e1613d7aff7bb51137eb6c8be77be4425e3e3a7b115b83a0a17751a8b"
+      },
+      {
+        "bytes": 861,
         "path": "README.md",
-        "sha256": "5fe52e441c67dea121cffeaaab51f4d0778c9dc011c76094d6a5771339583be0"
+        "sha256": "9109b05fb96b3c3707c32c73332ea0f6362bf478f3dbfaf65a67097f47540340"
+      },
+      {
+        "bytes": 11716,
+        "path": "VIRTUAL_ANDROID_MASTER_PLAN.md",
+        "sha256": "95f5f5dc75cb8907cd41db63235d8cdfce01faa341ea0da6faf7bd36b9363c2e"
       },
       {
         "bytes": 1358,
@@ -301,6 +316,11 @@
         "sha256": "f08d1142bf1411018100eab9984f05065de4ef485ec6fd2c365ac06ebaca14ae"
       },
       {
+        "bytes": 3556,
+        "path": "docs/BASELINE_CHAT12_README.md",
+        "sha256": "5fe52e441c67dea121cffeaaab51f4d0778c9dc011c76094d6a5771339583be0"
+      },
+      {
         "bytes": 1142,
         "path": "docs/BUILD_MATRIX.md",
         "sha256": "77ff2c02d3652df644c193e6304bae24a723209b00cbacebf26d8fe728a3a3c5"
@@ -354,6 +374,16 @@
         "bytes": 3997,
         "path": "docs/REPRODUCIBLE_BUILDS.md",
         "sha256": "9c65ad93ba23cc7cb10b401221b0ea9575110dd493fb9a41fcef7f36eec38399"
+      },
+      {
+        "bytes": 496,
+        "path": "evidence/CHAT-12/INTEGRITY_REPAIR_PROOF.txt",
+        "sha256": "d113661df890842ef50c7af89597a3ba80d63705cd2dec2ba9777b5f3e13731c"
+      },
+      {
+        "bytes": 103,
+        "path": "evidence/CHAT-12/SOURCE_RELEASE_SHA256.txt",
+        "sha256": "479b3745873b04b41c2fd733e65d147b3c7a3a7af6dec52eee6225bb03606464"
       },
       {
         "bytes": 149,
@@ -476,9 +506,9 @@
         "sha256": "493d4c4504ceb97c183384be0cc3485ac85d764bc8348cbedb97b06b3312227e"
       },
       {
-        "bytes": 1908,
+        "bytes": 2033,
         "path": "scripts/ci_source_checks.sh",
-        "sha256": "12306a25a31673bce9b6629b57fe7531be5f883e201464f8bcec1038e325ef73"
+        "sha256": "2ba24584342154f16fdf47b83671e24f4468e57c0b30fabae2d9e8a97c7cf0fb"
       },
       {
         "bytes": 441,
