@@ -63,7 +63,7 @@
   "source_date_epoch": 1788220800,
   "source_inventory": {
     "file_count": 113,
-    "filelist_sha256": "8f7c19df6e1ea778dcbf414a2638341a9c0442b505a85f662c29cdb3a3faeb81",
+    "filelist_sha256": "8d06deebf9e66a661b9b2a60e0523b1ebec44ca555ae912734b361f7dd63df40",
     "files": [
       {
         "bytes": 1472,
@@ -111,9 +111,9 @@
         "sha256": "e1faa035ca72bba6c3530b962b0392ce3e3444e9dc527bafed315c26bcf2693b"
       },
       {
-        "bytes": 3598,
+        "bytes": 4664,
         "path": "PROJECT_STATE.json",
-        "sha256": "1641110e1613d7aff7bb51137eb6c8be77be4425e3e3a7b115b83a0a17751a8b"
+        "sha256": "e481cc2473b02b05ed802c6b84c903cd7fa8e9220051cf42e898b2fd82b66d6c"
       },
       {
         "bytes": 861,
@@ -121,14 +121,14 @@
         "sha256": "9109b05fb96b3c3707c32c73332ea0f6362bf478f3dbfaf65a67097f47540340"
       },
       {
-        "bytes": 11716,
+        "bytes": 12875,
         "path": "VIRTUAL_ANDROID_MASTER_PLAN.md",
-        "sha256": "95f5f5dc75cb8907cd41db63235d8cdfce01faa341ea0da6faf7bd36b9363c2e"
+        "sha256": "30bfcb2be765e501cf003598260eb0b4957297fb01f6a123f6784d8d0990a955"
       },
       {
-        "bytes": 1358,
+        "bytes": 1544,
         "path": "app/build.gradle.kts",
-        "sha256": "2604097c43f85f13f0083ac0525d2069e47609c60643b1e5ff5a50541f8c9023"
+        "sha256": "32b280bc23fb012397806f4a4a77da8be1ff2b76fd10a5f539df74cde648d227"
       },
       {
         "bytes": 1174,
@@ -261,9 +261,9 @@
         "sha256": "f1a1c8c93a9a88ac0d0c8a18b80b753e18262b474f564adf549767418f1fce48"
       },
       {
-        "bytes": 7185,
+        "bytes": 7178,
         "path": "app/src/main/java/com/example/virtualandroid/vm/QemuProcessLauncher.kt",
-        "sha256": "f8f7867eac7a3631973319bc06dfc4dc7c7d102b0239e40a223718721fddce87"
+        "sha256": "1b7156dda839657628ba159effd1eb3bcf82cab8568eeb0183b04cd3e8d7b2e4"
       },
       {
         "bytes": 3337,
@@ -276,9 +276,9 @@
         "sha256": "9c05ab5db25590fd48fd1d07247df4ce5e2cea5ed0c8c9576efb122a409f3807"
       },
       {
-        "bytes": 14596,
+        "bytes": 14622,
         "path": "app/src/main/java/com/example/virtualandroid/vm/VmService.kt",
-        "sha256": "561a52310e27112c3815743086ccc37b9c6c72a78686a86c7b80ef7b32322f24"
+        "sha256": "f8e7715061508dbe2205b0204034d53e1d9bf4d07fdd583fdeb755d2345af823"
       },
       {
         "bytes": 153,

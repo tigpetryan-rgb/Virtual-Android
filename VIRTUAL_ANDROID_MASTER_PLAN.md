@@ -1,8 +1,8 @@
 # VIRTUAL ANDROID — CANONICAL MASTER EXECUTION PLAN
 
 **Plan ID:** VA-MASTER-PLAN  
-**Version:** 1.0.1  
-**Canonical date:** 2026-09-02  
+**Version:** 1.0.2  
+**Canonical date:** 2026-09-03  
 **Canonical repository:** `tigpetryan-rgb/Virtual-Android`  
 **Default branch:** `main`
 
@@ -79,11 +79,11 @@ Clean checkout builds/tests must be reproducible with documented/pinned toolchai
 
 ## 5. Current evidence
 
-All 13 parallel workstreams have archived RESULT artifacts:
+All 13 parallel workstreams have archived RESULT artifacts. CHAT-12 has additionally been integrated into the canonical baseline with live CI evidence:
 
 | ID | Workstream | Artifact | Integration |
 |---|---|---|---|
-| CHAT-01 | P1 device acceptance | `RESULT_ARCHIVED` | PENDING |
+| CHAT-01 | P1 device acceptance | `RESULT_ARCHIVED` | NEXT |
 | CHAT-02 | AOSP/framework | `RESULT_ARCHIVED` | PENDING |
 | CHAT-03 | display hardening | `RESULT_ARCHIVED` | PENDING |
 | CHAT-04 | deterministic input | `RESULT_ARCHIVED` | PENDING |
@@ -94,7 +94,7 @@ All 13 parallel workstreams have archived RESULT artifacts:
 | CHAT-09 | performance | `RESULT_ARCHIVED` | PENDING |
 | CHAT-10 | AVF/pKVM backend | `RESULT_ARCHIVED` | PENDING |
 | CHAT-11 | lifecycle hardening | `RESULT_ARCHIVED` | PENDING |
-| CHAT-12 | CI reproducibility | `RESULT_ARCHIVED` | PENDING |
+| CHAT-12 | CI reproducibility | `RESULT_ARCHIVED` | INTEGRATED |
 | CHAT-13 | threat model | `RESULT_ARCHIVED` | PENDING |
 
 The project is **not release-complete**.
@@ -109,12 +109,20 @@ Evidence:
 - initialization commit: `fe9b4d20669a638890bf5d7144ef1ef0f543324b`;
 - canonical governance files installed on root.
 
-### G1 — CHAT-12 CI reproducibility — **NEXT**
-Create the reproducible canonical baseline first: clean checkout build, documented/pinned toolchain, CI validation, secret/generated-artifact policy, no dependence on untracked local state.
+### G1 — CHAT-12 CI reproducibility — **PASS**
+The canonical baseline was reconstructed from the archived CHAT-12 source using integrity repair evidence rather than restarting staging.
 
-**PASS:** clean checkout canonical build/tests reproducibly succeed.
+Evidence:
+- recovered source ZIP SHA-256: `fdf40b01bc1dd3cc68b39fa118aab9b312683756126df63c25b71bce15d086a1`;
+- integrity diagnostic run `33672125749`: 109 ZIP entries, `testzip=None`, exact target SHA-256;
+- canonical source materialization commit: `d3021d5aa77c539ab756be34665a2b0c7f14f11b`;
+- source/reproducibility workflow run `33709407052` succeeded after toolchain-stable initramfs packaging checks and deterministic metadata validation;
+- Android compile run `33709904931` on commit `df64f7dbe45cfb7074cc0cc2797a9d010cb790e4` succeeded through debug APK assembly, JNI ELF 16 KiB verification, QEMU dependency/hash closure, and artifact upload;
+- temporary staging/repair/bootstrap workflows were removed from the canonical tree.
 
-### G2 — CHAT-01 P1/device capability
+**PASS:** clean-checkout canonical source checks and Android build path have real CI evidence. This G1 promotion is merged only if `source-checks` also passes on the exact finalization tree.
+
+### G2 — CHAT-01 P1/device capability — **NEXT**
 Integrate capability detection, no-root/no-bootloader normal path, fallback-vs-acceleration matrix, clear unsupported states.
 
 **PASS:** physical ARM64 device baseline acceptance evidence exists.
@@ -230,19 +238,20 @@ Completed:
 - product/architecture direction defined;
 - 13 RESULT workstreams archived;
 - dedicated canonical GitHub repo established;
-- G0 governance established.
+- G0 governance established;
+- G1/CHAT-12 reproducible canonical baseline integrated and evidenced.
 
 Remaining:
-- G1 reproducible canonical baseline;
 - G2–G12 ordered integration/acceptance;
 - G13 final release acceptance.
 
-**NEXT REQUIRED GATE: G1 / CHAT-12 — CI reproducibility.**
+**NEXT REQUIRED GATE: G2 / CHAT-01 — P1 physical-device acceptance.**
 
 ## 12. Revision record
 
 - `1.0.0` — initial strict plan after 13 RESULT archives were preserved.
 - `1.0.1` — G0 completed; canonical GitHub repository established; architecture and gate order unchanged; next gate advanced to G1.
+- `1.0.2` — G1/CHAT-12 reproducible canonical baseline integrated with exact source-integrity, source-checks, and Android compile evidence; next gate advanced to G2/CHAT-01, without starting G2 work.
 
 ## 13. Plan lock
 
