@@ -56,8 +56,8 @@ class VmClient(
         runCatching { context.unbindService(connection) }
     }
 
-    fun startP1(memoryMiB: Int, vcpus: Int) {
-        service?.startP1Guest(memoryMiB, vcpus)
+    fun startP1(memoryMiB: Int, vcpus: Int, runId: String? = null) {
+        service?.startP1Guest(memoryMiB, vcpus, runId.orEmpty())
             ?: listener.onLog("VM service is not connected")
     }
 

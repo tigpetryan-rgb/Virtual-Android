@@ -7,6 +7,7 @@ import java.security.MessageDigest
 
 data class QemuRuntimeVerification(
     val manifestSha256: String,
+    val qemuSha256: String,
     val fileCount: Int,
     val totalBytes: Long,
     val minimumLoadAlignment: Int,
@@ -15,6 +16,7 @@ data class QemuRuntimeVerification(
 /** Verifies the imported QEMU runtime before any child process is executed. */
 object QemuRuntimeVerifier {
     private const val MANIFEST_ASSET = "qemu/qemu-runtime-manifest.json"
+    private const val REQUIRED_LOAD_ALIGNMENT = 16 * 1024
 
     fun verify(context: Context): Result<QemuRuntimeVerification> = runCatching {
         val manifestBytes = try {
@@ -27,16 +29,23 @@ object QemuRuntimeVerifier {
         require(manifest.optString("host_abi") == "arm64-v8a") { "QEMU runtime manifest is not arm64-v8a" }
         val main = manifest.getString("main")
         require(main == "libqemu_system_aarch64.so") { "Unexpected QEMU main binary: $main" }
+        val minimumLoadAlignment = manifest.optInt("minimum_load_alignment", 0)
+        require(minimumLoadAlignment >= REQUIRED_LOAD_ALIGNMENT) {
+            "QEMU runtime manifest load alignment=$minimumLoadAlignment; require >= $REQUIRED_LOAD_ALIGNMENT"
+        }
 
         val nativeDir = File(context.applicationInfo.nativeLibraryDir)
         val files = manifest.getJSONArray("files")
+        val seenNames = mutableSetOf<String>()
         var total = 0L
+        var qemuSha256: String? = null
         for (i in 0 until files.length()) {
             val entry = files.getJSONObject(i)
             val name = entry.getString("name")
             require(name.startsWith("lib") && name.endsWith(".so") && !name.contains('/')) {
                 "Unsafe packaged runtime filename: $name"
             }
+            require(seenNames.add(name)) { "Duplicate QEMU runtime manifest entry: $name" }
             val file = File(nativeDir, name)
             require(file.isFile) { "QEMU runtime file missing after install: ${file.absolutePath}" }
             val expectedBytes = entry.getLong("bytes")
@@ -46,18 +55,20 @@ object QemuRuntimeVerifier {
             val expectedSha = entry.getString("sha256")
             val actualSha = sha256(file)
             require(actualSha.equals(expectedSha, ignoreCase = true)) {
-                "QEMU runtime SHA-256 mismatch for $name"
+                "QEMU runtime SHA-256 mismatch for $name: installed=$actualSha manifest=$expectedSha"
             }
+            if (name == main) qemuSha256 = actualSha
             total += file.length()
         }
         require(files.length() > 0) { "QEMU runtime manifest contains no files" }
-        require(File(nativeDir, main).isFile) { "QEMU main binary missing: $main" }
+        require(qemuSha256 != null) { "QEMU runtime manifest does not contain main binary $main" }
 
         QemuRuntimeVerification(
             manifestSha256 = sha256(manifestBytes),
+            qemuSha256 = qemuSha256,
             fileCount = files.length(),
             totalBytes = total,
-            minimumLoadAlignment = manifest.optInt("minimum_load_alignment", 0),
+            minimumLoadAlignment = minimumLoadAlignment,
         )
     }
 

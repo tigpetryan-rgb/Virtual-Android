@@ -101,3 +101,9 @@ exit code, failure reason, and monotonic milliseconds to:
 The serial marker plus this report is the P1 proof artifact.
 
 See `docs/HOST_16K_PAGES.md` for the host-page-size invariant.
+
+## F. Acceptance-proof integrity
+
+The QEMU runtime manifest is now part of the physical-device proof chain. APK-side verification requires an ARM64 manifest, the expected QEMU main binary, unique runtime filenames, file size/hash matches, inclusion of the main binary, and `minimum_load_alignment >= 16384`. The successful P1 proof records both the runtime-manifest SHA-256 and the installed QEMU binary SHA-256.
+
+The ADB acceptance runner uses `scripts/validate_p1_report.py` to reject stale/wrong run IDs, reports predating the current APK install/update, build-fingerprint mismatches, non-TCG backends, marker-only fakes, and successful reports without guest/QEMU hashes. Synthetic validator tests are source-level assurance only and never count as device PASS.

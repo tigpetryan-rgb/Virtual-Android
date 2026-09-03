@@ -1,0 +1,9 @@
+CHAT-01 archived RESULT evidence
+
+file=VA-CHAT-01-P1-DEVICE-ACCEPTANCE-RESULT.zip
+drive_file_id=1nmAqE9tKh2KhoQE_ixpuNricjoMVV3FW
+bytes=182068
+sha256=541185ef9f32e63d16291f347c837ed0b9c43e7f221fc12a9aa7ff94bdb8a629
+source=Google Drive / Virtual Android evidence folder
+
+This hash records the immutable integration input. It is not physical-device acceptance evidence.
