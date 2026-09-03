@@ -42,13 +42,14 @@ class VmService : Service() {
             if (callback != null) callbacks.unregister(callback)
         }
 
-        override fun startP1Guest(memoryMiB: Int, vcpus: Int) {
+        override fun startP1Guest(memoryMiB: Int, vcpus: Int, requestedRunId: String?) {
             if (vmState in setOf(VmState.PREPARING, VmState.STARTING, VmState.RUNNING, VmState.STOPPING)) {
                 emitLog("Start ignored: VM is already $vmState")
                 return
             }
             val token = runGeneration.incrementAndGet()
-            executor.execute { startP1(token, memoryMiB, vcpus) }
+            val runId = P1ProofContract.normalizeRunId(requestedRunId)
+            executor.execute { startP1(token, runId, memoryMiB, vcpus) }
         }
 
         override fun startP2Guest(memoryMiB: Int, vcpus: Int) {
@@ -78,7 +79,6 @@ class VmService : Service() {
         }
 
         override fun stopVm() {
-            // Invalidates PREPARING/STARTING work before touching the process.
             runGeneration.incrementAndGet()
             controlExecutor.execute {
                 if (vmState == VmState.IDLE || vmState == VmState.STOPPED) {
@@ -99,8 +99,9 @@ class VmService : Service() {
 
     private fun isCurrent(token: Long): Boolean = runGeneration.get() == token
 
-    private fun startP1(token: Long, memoryMiB: Int, vcpus: Int) {
-        val report = P1RunReport(memoryMiB, vcpus)
+    private fun startP1(token: Long, runId: String, memoryMiB: Int, vcpus: Int) {
+        val report = P1RunReport(runId, memoryMiB, vcpus)
+        emitLog("P1 runId=$runId backend=${P1ProofContract.BACKEND}")
         fun persistReport() {
             runCatching { report.write(this) }
                 .onSuccess { emitLog("P1 report: ${it.absolutePath}") }
@@ -108,7 +109,7 @@ class VmService : Service() {
         }
         fun cancelled(stage: String): Boolean {
             if (isCurrent(token)) return false
-            report.onFailure("cancelled during $stage")
+            report.onFailure("CANCELLED", "cancelled during $stage")
             emitLog("P1 run cancelled during $stage")
             persistReport()
             return true
@@ -117,17 +118,20 @@ class VmService : Service() {
         setState(VmState.PREPARING, "installing guest assets")
         val artifacts = GuestAssetInstaller.installP1(this).getOrElse {
             val detail = "guest asset error: ${it.message}"
-            report.onFailure(detail)
+            report.onFailure("GUEST_ASSET", detail)
             if (isCurrent(token)) fail(detail)
             persistReport()
             return
         }
+        report.onGuestArtifacts(artifacts)
+        emitLog("P1 guest artifacts: kernelSha256=${artifacts.kernelSha256} initramfsSha256=${artifacts.initramfsSha256}")
         if (cancelled("guest asset preparation")) return
 
         emitLog("Running QEMU runtime verification + host preflight (--version)")
         val preflight = launcher.preflight(::emitLog).getOrElse {
+            val category = (it as? QemuProcessLauncher.LaunchFailure)?.category ?: "QEMU_PREFLIGHT"
             val detail = "QEMU preflight failed: ${it.message}"
-            report.onFailure(detail)
+            report.onFailure(category, detail)
             if (isCurrent(token)) fail(detail)
             persistReport()
             return
@@ -147,7 +151,7 @@ class VmService : Service() {
         val stopAfterMarkerIssued = AtomicBoolean(false)
         val result = launcher.run(args, timeoutSeconds = P1_TIMEOUT_SECONDS) { line ->
             report.onGuestLog(line)
-            if (line.contains("VA_P1_GUEST_OK") && stopAfterMarkerIssued.compareAndSet(false, true)) {
+            if (line.trim() == P1ProofContract.TERMINAL_MARKER && stopAfterMarkerIssued.compareAndSet(false, true)) {
                 if (isCurrent(token)) setState(VmState.RUNNING, "P1 guest boot marker received — PASS")
                 controlExecutor.execute {
                     Thread.sleep(250)
@@ -161,22 +165,32 @@ class VmService : Service() {
         result.onSuccess { exit ->
             report.onExit(exit.exitCode, exit.launchPath)
             if (!isCurrent(token)) {
-                report.onFailure("cancelled by user")
+                report.onFailure("CANCELLED", "cancelled by user")
             } else if (report.markerSeen()) {
                 setState(VmState.STOPPED, "P1 PASS; QEMU exited code=${exit.exitCode}")
             } else {
-                val detail = "QEMU exited before guest boot marker; code=${exit.exitCode}"
-                report.onFailure(detail)
+                val category = report.earlyExitCategory()
+                val detail = "QEMU exited before guest boot marker; code=${exit.exitCode}; category=$category"
+                report.onFailure(category, detail)
                 fail(detail)
             }
         }.onFailure {
-            val detail = if (isCurrent(token)) {
-                "QEMU launch failed: ${it.message}"
+            val current = isCurrent(token)
+            val launcherCategory = (it as? QemuProcessLauncher.LaunchFailure)?.category
+            val category = if (!current) {
+                "CANCELLED"
+            } else if (launcherCategory == "TIMEOUT") {
+                report.timeoutCategory()
+            } else {
+                launcherCategory ?: "QEMU_LAUNCH"
+            }
+            val detail = if (current) {
+                "QEMU launch failed: ${it.message}; category=$category"
             } else {
                 "cancelled by user: ${it.message}"
             }
-            report.onFailure(detail)
-            if (isCurrent(token)) fail(detail)
+            report.onFailure(category, detail)
+            if (current) fail(detail)
         }
         persistReport()
     }

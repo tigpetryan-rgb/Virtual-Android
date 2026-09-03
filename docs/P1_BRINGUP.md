@@ -132,3 +132,13 @@ the final result. This is the evidence file to collect together with serial logs
 on physical-device tests.
 
 The build/import instructions are now in `docs/P1_HOST_BUILD.md`.
+
+## Current-run proof hardening (task 01)
+
+P1 proof format 3 is bound to one execution with a `runId`. The debug ADB runner generates that ID, passes it through the Activity/Binder boundary, and rejects any report whose ID or start timestamp does not match the current invocation. Manual UI runs receive a service-generated ID.
+
+The report additionally records the current APK version/install timestamp, host Android build fingerprint, kernel/initramfs hashes, QEMU binary/runtime-manifest hashes, backend=`TCG`, and the exact terminal marker. `P1ReportStore.latestPassed()` rejects legacy reports, reports from another host build, and reports that predate the current APK update.
+
+Guest boot assets are recopied from the current APK on every P1 attempt. This deliberately prevents a missing new APK asset from being masked by an old `filesDir/guest/p1/Image` left by an earlier install.
+
+QEMU launcher failures now carry explicit categories for runtime integrity, dynamic linker/dependency problems, direct/linker64 execution denial, timeout, and malformed preflight output. Guest/QEMU serial text is also scanned for JIT/exec denial, kernel-load errors and kernel/initramfs panic signals so early exit and watchdog failures identify the most likely layer.

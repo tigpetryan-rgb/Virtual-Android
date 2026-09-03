@@ -25,8 +25,6 @@ Every assistant/agent/session MUST, in this exact order:
 
 ## Current starting point
 
-As of plan v1.0.1, all 13 parallel workstreams have archived RESULT artifacts, but canonical repository integration and final physical-device/end-to-end acceptance are still pending.
+Plan v1.0.2 is canonical. G0 and G1 are complete on `main`; CHAT-12 is integrated and the post-merge canonical source checks are green.
 
-G0 is complete. The canonical repository is `tigpetryan-rgb/Virtual-Android` on `main`.
-
-The next required gate is **G1: integrate CHAT-12 CI reproducibility and prove a clean-checkout reproducible canonical baseline before any other workstream integration**.
+The next required gate is **G2 / CHAT-01: integrate the P1 device-capability and physical-device acceptance path**. Source/CI readiness is not `DEVICE_ACCEPTED`; G2 PASS still requires fresh evidence from a real stock ARM64 Android device.

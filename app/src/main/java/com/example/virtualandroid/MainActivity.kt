@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity(), VmClient.Listener, GuestDisplayView.Li
     @Volatile private var decision: EngineDecision? = null
     @Volatile private var vmConnected = false
     private var autoP1Requested = false
+    private var autoP1RunId: String? = null
     private var autoP1Started = false
     private var autoP2Requested = false
     private var autoP2Started = false
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity(), VmClient.Listener, GuestDisplayView.Li
         binding.guestDisplay.setListener(this)
         val debuggable = (applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
         autoP1Requested = debuggable && intent.getBooleanExtra("auto_p1", false)
+        autoP1RunId = if (autoP1Requested) intent.getStringExtra("p1_run_id") else null
         autoP2Requested = debuggable && intent.getBooleanExtra("auto_p2", false)
         autoP3Requested = debuggable && intent.getBooleanExtra("auto_p3", false)
 
@@ -165,13 +167,17 @@ class MainActivity : AppCompatActivity(), VmClient.Listener, GuestDisplayView.Li
         appendLog("P3 interactive acceptance: ${if (file != null) "PASS" else "FAIL"}; proof=${file?.absolutePath ?: "none"}")
     }
 
-    private fun startP1(d: EngineDecision) {
+    private fun startP1(d: EngineDecision, runId: String? = null) {
         if (d.mode == EngineMode.UNSUPPORTED) {
             appendLog("P1 not started: ${d.reason}")
             return
         }
         appendLog("Requesting P1 guest: ${d.recommendedGuestRamMiB} MiB, ${d.recommendedVcpus} vCPU")
-        vmClient.startP1(d.recommendedGuestRamMiB.coerceAtMost(2048), d.recommendedVcpus)
+        vmClient.startP1(
+            d.recommendedGuestRamMiB.coerceAtMost(2048),
+            d.recommendedVcpus,
+            runId,
+        )
     }
 
     private fun startP2(d: EngineDecision) {
@@ -208,8 +214,8 @@ class MainActivity : AppCompatActivity(), VmClient.Listener, GuestDisplayView.Li
         if (!autoP1Requested || autoP1Started || !vmConnected) return
         val d = decision ?: return
         autoP1Started = true
-        appendLog("debug auto_p1 requested")
-        startP1(d)
+        appendLog("debug auto_p1 requested; runId=${autoP1RunId ?: "service-generated"}")
+        startP1(d, autoP1RunId)
     }
 
     private fun maybeAutoStartP2() {
